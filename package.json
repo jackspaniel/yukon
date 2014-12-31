@@ -10,7 +10,11 @@
     "type": "git",
     "url": "https://github.com/jackspaniel/yukon"
   },
-  "author": "jackspaniel Solutions <jackspaniel99@gmail.com> (https://github.com/jackspaniel)",
+  "author": {
+    "name": "jackspaniel Solutions",
+    "email": "jackspaniel99@gmail.com",
+    "url": "https://github.com/jackspaniel"
+  },
   "license": "Apache 2.0",
   "bugs": {
     "url": "https://github.com/jackspaniel/yukon/issues"
@@ -19,5 +23,11 @@
   "dependencies": {
     "lodash": "^2.4.1",
     "superagent": "^0.21.0"
-  }
+  },
+  "readme": "yukon\n=====\n\nNode component discovery and initialization interface\n",
+  "readmeFilename": "README.md",
+  "gitHead": "d30252453e13ddf4b9d52282dd4e56879e4fa4bf",
+  "_id": "yukon@0.0.2",
+  "_shasum": "cac4972c51bf63dbb7377a51ded1bb32036f997e",
+  "_from": "yukon@^0.0.2"
 }

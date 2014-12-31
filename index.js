@@ -114,9 +114,6 @@ var defaultConfig =  {
     // valid values: json, form  - or array of these if different values are needed for different calls (use 'form' for a standard post submit with name/value pairs - everything else is json body)
     apiBodyType: 'json',
 
-    // array of cookie names to look for in the request and pass to the browser (with value from request cookie)
-    apiCookies: [], // TODO - add cookies to custom headers and handle outside api.js as this is an edgy edge case
-
     // set to > 0 (milliseconds) force stub calls to simualate a longer api call - works for API or Stubs
     // WARNING: don't forget to turn this off in production mode!
     apiSleep: 0,

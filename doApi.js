@@ -38,7 +38,6 @@ module.exports = function(app, config) {
         apiParams      : getValue(nodule.apiParams, index, apiParamsIsArray), 
         apiVerb        : getValue(nodule.apiVerb, index),
         apiBodyType    : getValue(nodule.apiBodyType, index),
-        apiCookies     : getValue(nodule.apiCookies, index),
         handleError    : getValue(nodule.handleError, index),
         timeout        : getValue(nodule.timeout, index),
         stubPath       : getValue(nodule.stubPath, index), 
