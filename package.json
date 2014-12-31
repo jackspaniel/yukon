@@ -1,6 +1,6 @@
 {
   "name": "yukon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Self-discovering component-based API-driven framework based on express",
   "main": "index.js",
   "scripts": {
