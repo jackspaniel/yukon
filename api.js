@@ -1,43 +1,48 @@
 var fs = require('fs');
+var path = require('path');
 var sa = require('superagent');
+var _ = require('lodash');
 
 module.exports = function(app, config) {
   var debug = config.debug('yukon->api');
 
   return { 
-    callApi: callApi,
+    getData: getData,
   };
 
   // route call to get stub or use live API
-  function callApi(req, res, next, callArgs) {
-    debug("callApi called, callArgs = " + callArgs);
+  function getData(callArgs, req, res, next) {
+    debug("getData called");
 
-    if (callArgs.stubPath) 
-      readStub(req, res, next, callArgs);
+    if (callArgs.useStub) 
+      readStub(callArgs, req, res, next);
     else 
-      getData(req, res, next, callArgs);
+      callApi(callArgs, req, res, next);
   }
 
   // call live API - return data as res.locals[namespace] (namespace = data1, data2, data3 etc. for component level API calls)  
-  function getData(req, res, next, callArgs) {
-    debug('getData called, namespace = ' + callArgs.namespace);
+  function callApi(args, req, res, next) {
 
-    // if path ends with '/', assume it gets an id from the express request :id matcher
-    callArgs.apiPath     = callArgs.apiPath.match(/\/$/) ? callArgs.apiPath + req.params.id : callArgs.apiPath;
-    callArgs.apiVerb     = callArgs.apiVerb || 'get';
-    callArgs.apiParams   = callArgs.apiParams || {};
-    callArgs.apiBodyType = callArgs.apiBodyType || 'json';
-    callArgs.paramMethod = (callArgs.apiVerb === 'get') ? 'query' : 'send';
+    debug('callApi called, namespace = ' + args.namespace);
+
+    var callArgs = _.assign(_.cloneDeep(config.apiDefaults), args);
+    callArgs.paramMethod = (callArgs.verb === 'get') ? 'query' : 'send';
+
+    // MAGIC ALERT: if path ends with '/', assume it gets an id from the express request :id matcher
+    callArgs.path = callArgs.path.match(/\/$/) ? callArgs.path + req.params.id : callArgs.path;
     
+    console.log(callArgs);
+
     config.beforeApiCall(callArgs, req, res);
 
     var call = sa
-                 [callArgs.apiVerb](callArgs.apiPath)
-                 [callArgs.paramMethod](callArgs.apiParams)
-                 .type(callArgs.apiBodyType) 
+                 [callArgs.verb](callArgs.path)
+                 [callArgs.paramMethod](callArgs.params)
+                 .type(callArgs.bodyType) 
                  .timeout(callArgs.timeout);
 
     callArgs.customHeaders.forEach(function(header) {
+      debug('adding custom header: '+header.name+'='+header.value);
       call.set(header.name, header.value);
     });
 
@@ -57,13 +62,20 @@ module.exports = function(app, config) {
     });
   }
 
-  // return stub data as res.locals[namespace] (namespace = data1, data2, data3 etc. for component level API calls)
-  function readStub(req, res, next, callArgs) {
-    debug('loooking for stub - ' + callArgs.stubPath);
+  // return stub data as res.locals[namespace] same as API
+  function readStub(callArgs, req, res, next) {
+    // MAGIC ALERT: framework assumes the stub name = nodule name if no stubPath is supplied
+    var stubName = callArgs.stubPath || req.nodule.name; 
+    
+    var stub = (stubName.indexOf('/') > -1) 
+               ? path.join(process.cwd(), stubName) 
+               : path.join(req.nodule.path, stubName+'.stub.json');
+    
+    debug('loooking for stub - ' + stub);
 
     var data = {};
     try {
-      data = fs.readFileSync(callArgs.stubPath);
+      data = fs.readFileSync(stub);
       debug('stub found!, namespace='+callArgs.namespace);
     }
     catch(e) {

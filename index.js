@@ -7,11 +7,9 @@ module.exports = function(app, config) {
   var debug = yukonConfig.debug('yukon->index');
   debug('initializing');
   
-  var api = require('./api.js')(app, yukonConfig);
-
   yukonConfig.noduleDefaults.middlewares = [
     config.appPreApi  || passThrough,
-    require('./preApi')(app, yukonConfig, api), // preprocessing logic before APIs are called
+    require('./preApi')(app, yukonConfig), // preprocessing logic before APIs are called
 
     config.appDoApi   || passThrough,
     require('./doApi')(app, yukonConfig), // handles all API calls in parallel
@@ -32,20 +30,14 @@ function passThrough(req, res, next) {
 }
 
 var defaultConfig =  {
-  // called at the start of every api call if defined
+  // called at the start of every api or stub call
   beforeApiCall: null,
 
-  // called after every api call if defined
+  // called after every api call
   afterApiCall: null,
 
-  // called after every stub call if defined
+  // called after every stub call
   afterStubCall: null,
-
-  // directory to start in for templateNames with a directory in them
-  templateRoot: 'nodules',
-
-  // alternate place to look for stubs than the nodule dir
-  sharedStubPath: null,
 
   // default debug function
   yukonCustomDebug: function(identifier) {   
@@ -55,84 +47,70 @@ var defaultConfig =  {
   },
 
   noduleDefaults: {
-    // array of middleware functions to be executed on each request, set in yukon init method
-    middlewares: null, 
-
-    // use to skip API call(s) altogether
-    skipApi: false,
-
-    // array of optional functions to be called with the apis specified in the nodule (IE - global or semi-global calls like getProfile, getGlobalNav)
-    // these can be conditional per nodule/request if set in the appDoApi middleware
-    apiCalls: [],
-
-    // arguments (if needed) to go with the apiCalls above
-    apiAgs: [],
-
     // Properties inherited from nodule.js (see nodule conf (TODO:link here) as these may get out of date):
-    // middlewares (REQUIRED) - array of (or function which returns array of) middleware functions which will be called in order for each nodule on each express request
     // route (REQUIRED) - needs to be defined in each nodule, and be unique
     // routeVerb - (default:get)
     // routeIndex - (default:0)
+    // middlewares - array of middleware functions to be executed on each request, defined in yukon module init
 
     // NOTE: the params below call be mutated in the preProcessor using this.myParam notation
     //       they can also be mutated in the postProcessor if the API calls are not dependent on them (IE - templateName)
 
-    //  app looks for [nodule name].[ templateExt ] if not specified and request is not JSON
+    // MAGIC ALERT: if template name is null, the framework looks for [nodule name].templateExt 
+    //              first in the nodule folder, then in the shared template folder
     templateName: null,
 
-    // app looks for templates with the same filename + this extension
+    // the framework looks for templates with the template name + this extension
     templateExt: '.jade',
-
-    // can be array or string - path to API server, can be used to over-ride default 
-    apiHost: null, 
-
-    // path to API - note: if path ends with a / framework automatically appends req.params.id
-    // Notes on multiple APIs per component:
-    //    1. Set the apiPath property to an array instead of a string.
-    //    2. The app places each API call in res.locals.data1, res.locals.data2, etc. 
-    //    3. If any of the APIs needs params, make sure you put them in the correct slot. IE - apiParams[1] = {indludecta:'true'};
-    //    4. If an array of stubNames is created - those will be used in place of the corresponding APIs when in stub mode.
-    //    6. As before, to use the same stub for each call just leave stubName blank (looks for standard name) or specify a custom string.
-    //    7. As always you can set any of the properties above dynamically inside your preProcessor using the this.[propertyName] nomenclature.
-    apiPath: null,
-
-    // params to send to API server
-    // If apiVerb is 'post', this can be a deep json object (apiBodyType=json) or a shallow object of name value pairs (apiBodyType=form)
-    // If using multiple apiPaths, make sure you put the apiParams in the correct slot. IE - apiParams[1] = {indludecta:'true'};
-    apiParams: {},
-
-    // valid values: get, post, put, del - or array of these if different values are needed for different calls (uses 'del' since delete is a reserved word)
-    apiVerb: 'get',
-
-    // valid values: json, form  - or array of these if different values are needed for different calls (use 'form' for a standard post submit with name/value pairs - everything else is json body)
-    apiBodyType: 'json',
-
-    // set to > 0 (milliseconds) force stub calls to simualate a longer api call - works for API or Stubs
-    // WARNING: don't forget to turn this off in production mode!
-    apiSleep: 0,
-
-    // (numeric) - max API return time in ms, needs to be array if more than one API is called, set other values to null to use default - IE - [null,20000,null]
-    timeout: null,
-
-    // if not specified, app looks for [nodule name].stub.json - looks for stubName first in nodule folder, then in app/shared/stubs
-    // Note: can be array to use stubs for multiple api calls
-    stubName: null,
-
-    // set true to force api to use stub (IE - if API isn't ready yet)
-    forceStub: false,
 
     // 'html', 'json' only current values - use this to force any nodule to behave like a json or html call regardless of naming conventions or directory conventions
     contentType: null,
-
-    // set this to an Error() instance to "throw" an error from your nodule - see channel.js for example
-    error: null,
 
     // use to manipulate query params or other business logic before api call(s)
     preProcessor: function(req, res) { },
 
     // use to process data returned from the API before calling template or sending back to client as JSON
     postProcessor: function(req, res) { },
-    // NOTE: one important property you can set in this function is res.renderData - this is the data sent to the jade template or back to the client as JSON
-    // if you don't specify res.renderData the app uses res.locals.data1
-  }    
+    // NOTE: one important property you usually need to set in the postProcessor is res.renderData 
+    //       this is the data sent to the jade template or back to the client as JSON
+    // MAGIC ALERT: if you don't specify res.renderData the framework sets res.renderData = res.locals.data1
+
+    // set this.error to an Error() instance to call next(error) inside the preProcessor or postProcessor
+    error: null,
+
+    // array of apiCalls to call in parallel
+    // NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the appDoApi middleware
+    apiCalls: [],
+  },
+
+  /// API CALL PROPERTIES ////////////////////////////////////////////////////////////////
+  /// NOTE: there can be multiple api calls per nodule, all called in parallel
+  apiDefaults: {
+    // path to server, can be used to over-ride default 
+    host: null, 
+
+    // MAGIC ALERT: if api path ends with a slash(/), the framework automatically tries to append req.params.id from the express :id wildcard 
+    //              as this is a very common REST paradigm
+    path: null,
+
+    // params to send to API server
+    // if verb is 'post', this can be a deep json object (apiBodyType=json) or a shallow object of name value pairs (apiBodyType=form)
+    params: {},
+
+    // valid values: get, post, put, del (express uses 'del' since delete is a reserved word)
+    verb: 'get',
+
+    // valid values: json, form (use 'form' for a standard post submit with name/value pairs - everything wants json body)
+    bodyType: 'json',
+
+    // (numeric) - max API return time in ms
+    timeout: null,
+
+    // set true to force api to use stub (IE - if API isn't ready yet)
+    useStub: false,
+
+    // can contain path or just name if in same folder
+    // MAGIC ALERT: if not specified, app looks for [nodule name].stub.json in nodule folder
+    stubPath: null,
+  },
 };
