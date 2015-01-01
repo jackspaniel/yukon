@@ -94,7 +94,7 @@ var defaultConfig =  {
     path: null,
 
     // params to send to API server
-    // if verb is 'post', this can be a deep json object (apiBodyType=json) or a shallow object of name value pairs (apiBodyType=form)
+    // if verb is 'post', this can be a deep json object (bodyType=json) or a shallow object of name value pairs (bodyType=form)
     params: {},
 
     // valid values: get, post, put, del (express uses 'del' since delete is a reserved word)
