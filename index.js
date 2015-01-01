@@ -32,27 +32,20 @@ function passThrough(req, res, next) {
 }
 
 var defaultConfig =  {
-  // required, to set apiServer on individual nodule, use nodule.apiHost
-  apiServer: [],
+  // called at the start of every api call if defined
+  beforeApiCall: null,
 
-  // called at the start of every api call, things like timers and custom headers can be set here
-  beforeApiCall: function(callArgs, req, res) { },
+  // called after every api call if defined
+  afterApiCall: null,
 
-  // called after every api call, regardless of success or failure, do things like logging here
-  // Note: called before onApiSuccess and onApiError
-  afterApiCall: function(callArgs, req, res) { },
-
-  // called on every successful API call (can be called multiple times per request if running multiple API calls)
-  onApiSuccess: function(req, res) { },
-
-  // called on every failed API call (should only be called once per request as framework routes into error flow on first unhandled error)
-  onApiError: function(req, res) { },
-
-  // these API calls will always be assumed success, all others will be routed through error flow unless handleError is set at the nodule level
-  defaultValidStatusCodes: [200, 204],
+  // called after every stub call if defined
+  afterStubCall: null,
 
   // directory to start in for templateNames with a directory in them
   templateRoot: 'nodules',
+
+  // alternate place to look for stubs than the nodule dir
+  sharedStubPath: null,
 
   // default debug function
   yukonCustomDebug: function(identifier) {   
@@ -121,28 +114,17 @@ var defaultConfig =  {
     // (numeric) - max API return time in ms, needs to be array if more than one API is called, set other values to null to use default - IE - [null,20000,null]
     timeout: null,
 
-    // can be [null|true|number|array] - tells the component to handle the error rather than the framework
-    //   if there are multiple APIs, set a value for each API - within an array
-    //   set to true to handle all API errors locally, 
-    //   set to a number (IE - 503 to handle all 503 statusCodes)
-    //   set to array (IE [404,502,503] to handle all those statusCodes)
-    // NOTE: statusCodes 200,204,400,401,403 are always handled by the component
-    handleError: null,
-
     // if not specified, app looks for [nodule name].stub.json - looks for stubName first in nodule folder, then in app/shared/stubs
     // Note: can be array to use stubs for multiple api calls
     stubName: null,
 
-    // alternate place to look for stubs than the nodule dir, can be changed at request-time if needed
-    sharedStubPath: null,
+    // set true to force api to use stub (IE - if API isn't ready yet)
+    forceStub: false,
 
     // 'html', 'json' only current values - use this to force any nodule to behave like a json or html call regardless of naming conventions or directory conventions
     contentType: null,
 
-    // set true to force api to use stub (IE - if API isn't ready yet)
-    forceStub: false,
-
-    // set this to an Error() instance to "throw" an error from your page - see channel.js for example
+    // set this to an Error() instance to "throw" an error from your nodule - see channel.js for example
     error: null,
 
     // use to manipulate query params or other business logic before api call(s)
