@@ -25,7 +25,7 @@ module.exports = function(app, config) {
       // if template name is not specified assume (nodule name).(nodule extention)
       var templateName = (nodule.templateName) ? nodule.templateName : nodule.name + nodule.templateExt;
       res.templatePath =  (templateName.indexOf('/') > -1) 
-                          ? path.join(process.cwd(), config.templateRoot, templateName) 
+                          ? path.join(process.cwd(), templateName) 
                           : path.join(nodule.path, templateName);
     }
     debug('res.templatePath = ' + res.templatePath);

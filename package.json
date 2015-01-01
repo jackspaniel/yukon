@@ -27,7 +27,7 @@
   "readme": "yukon\n=====\n\nNode component discovery and initialization interface\n",
   "readmeFilename": "README.md",
   "gitHead": "d30252453e13ddf4b9d52282dd4e56879e4fa4bf",
-  "_id": "yukon@0.0.2",
-  "_shasum": "cac4972c51bf63dbb7377a51ded1bb32036f997e",
-  "_from": "yukon@^0.0.2"
+  "_id": "yukon@0.0.4",
+  "_shasum": "98e0eb40b7bddfb0e7f80dd6da0853ccc2e2a9ab",
+  "_from": "yukon@^0.0.4"
 }
