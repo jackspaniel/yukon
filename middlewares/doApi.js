@@ -1,10 +1,9 @@
 var fs = require('fs');
 var path = require('path');
-var debug;
 
 // calls all APIs in parallel (inlcuding those added by the app-level appDoApi middleware)
 module.exports = function(app, config) {
-  debug = config.debug('yukon->doApi');
+  var debug = config.debug('yukon->doApi');
 
   var api = require('./api.js')(app, config);
 
