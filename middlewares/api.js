@@ -28,11 +28,13 @@ module.exports = function(app, config) {
     var callArgs = _.assign(_.cloneDeep(config.apiDefaults), args);
     callArgs.paramMethod = (callArgs.verb === 'get') ? 'query' : 'send';
 
+    if (callArgs.host) callArgs.path = callArgs.host + callArgs.path;
+
+    callArgs.path = apiServer + callArgs.path; // we don't want the apiServer in timer results
+
     // MAGIC ALERT: if path ends with '/', assume it gets an id from the express request :id matcher
     callArgs.path = callArgs.path.match(/\/$/) ? callArgs.path + req.params.id : callArgs.path;
     
-    console.log(callArgs);
-
     config.beforeApiCall(callArgs, req, res);
 
     var call = sa
