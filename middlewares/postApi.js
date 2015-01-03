@@ -1,3 +1,5 @@
+// wraps nodule.postProcessor, called after API calls return
+
 var path = require('path');
 
 // wraps nodule.postProcessor, called after all API calls return

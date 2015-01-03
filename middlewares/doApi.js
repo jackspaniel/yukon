@@ -1,7 +1,5 @@
-var fs = require('fs');
-var path = require('path');
-
 // calls all APIs in parallel (inlcuding those added by the app-level appDoApi middleware)
+
 module.exports = function(app, config) {
   var debug = config.debug('yukon->doApi');
 
@@ -10,7 +8,6 @@ module.exports = function(app, config) {
   // called as route comes in, before it goes to API
   return function(req, res, next) {
     debug("called");
-    console.log(req.nodule.apiCalls);
     if (req.nodule.apiCalls.length > 0) {
 
       var dataIdx = 1;
