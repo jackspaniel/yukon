@@ -53,11 +53,8 @@ var config =  {
   // invoked before every API call
   beforeApiCall: beforeApiCall,
 
-  // invoked after every API call
+  // invoked after every API call - success or error
   afterApiCall: afterApiCall,
-
-  // invoked after every stub call
-  afterStubCall: afterStubCall,
 
 
   //////////////////////////////////////////////////////////  
@@ -76,57 +73,27 @@ var config =  {
   }
 };
 
-
 function beforeApiCall(callArgs, req, res) {
-  debug('beforeApiCall');
-
-  var apiServer = callArgs.host ? 'http://' + callArgs.host : app.locals.apiServer;
-
-  callArgs.path = apiServer + callArgs.path;
+  debug('callling API - ' + callArgs.verb + ': ' + callArgs.path);
+  // example of app-specific behavior before calling API
+  callArgs.customHeaders = [
+    { name: 'x-device-type', value: req.deviceType},
+  ];
 }
 
 function afterApiCall(callArgs, req, res, next) {
-  debug('afterApiCall');
-
-  delete callArgs.params; // delete due to PCI concerns
-  
-  if (callArgs.timer) callArgs.timer.stop();
-  
-  var apiResponse = callArgs.apiResponse;
-  if (apiResponse) {
-    var msg = "RESPONSE FROM " 
-            + ((apiResponse.req) ? apiResponse + apiResponse.req.path : 'Superagent response.req is null')
-            + ": statusCode=" + apiResponse.statusCode;
-    debug(msg);
-    req.log.info({timer: Date.now() - callArgs.apiStartTime, step:'API', status:apiResponse.statusCode, 
-                 apiArgs:callArgs}, msg);
-
-    var error = true, errorHandledByComponent = false;
-    if (!callArgs.apiError && apiResponse.body && (callArgs.handleError === true 
-        || callArgs.validStatusCodes.indexOf(apiResponse.statusCode) > -1)) { 
-      error = null;
-      errorHandledByComponent = true;
-      onApiSuccess(callArgs, req, res);
-    }
-
-    // do error logic if we see certain errors, even if handled by component
-    if (error || (errorHandledByComponent && app.config.defaultValidStatusCodes.indexOf(apiResponse.statusCode) === -1 && apiResponse.body.errors)) {
-      onApiError(callArgs, req, res);
-    }
-  
-    if ((!error || errorHandledByComponent) && callArgs.callback) {
-      error = null;
-      callArgs.callback(req, res);
-    }
+  if (callArgs.apiError && !callArgs.errorHandledByComponent) {
+    debug(callArgs.apiError.stack || callArgs.apiError);
+    next(new Error('API failed for '+callArgs.path +': '+callArgs.apiError));
   }
-  setTimeout(function() { next(error); }, req.nodule.apiSleep); // simulates API taking a certain amount of time
+  else {
+    debug("RESPONSE FROM "+apiResponse.req.path+": statusCode=" + apiResponse.statusCode);
+    
+    next();
+  }
 }
 
 function afterStubCall(callArgs, req, res, next) {
   debug('afterStubCall');
-  onApiSuccess(callArgs, req, res);
-  
-  if (callArgs.callback) callArgs.callback(req, res);
-  
-  setTimeout(function() { next(); }, req.nodule.apiSleep); // simulates API call
+  next();
 }

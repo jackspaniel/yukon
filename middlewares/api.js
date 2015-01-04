@@ -3,6 +3,7 @@
 
 var path = require('path');
 var sa = require('superagent');
+var fs = require('fs');
 var _ = require('lodash');
 
 module.exports = function(app, config) {
@@ -81,15 +82,14 @@ module.exports = function(app, config) {
       debug('stub found!, namespace='+callArgs.namespace);
     }
     catch(e) {
-      debug('stub not found!');
-      next();
+      next(new Error(debug('stub not found!')));
       return;
     }
 
     res.locals[callArgs.namespace] = JSON.parse(data);
     
-    if (config.afterStubCall)
-      config.afterStubCall(callArgs, req, res, next);
+    if (config.afterApiCall)
+      config.afterApiCall(callArgs, req, res, next);
     else 
       next();
   }
