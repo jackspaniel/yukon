@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var nodulejs = require('nodulejs');
 
 module.exports = function(app, config) {
   var yukonConfig = _.merge(defaultConfig, config);
@@ -7,22 +8,23 @@ module.exports = function(app, config) {
   var debug = yukonConfig.debug('yukon->index');
   debug('initializing');
   
+  // array of middleware functions to be executed on each request
   yukonConfig.noduleDefaults.middlewares = [
     config.appPreApi  || passThrough,
-    require('./preApi')(app, yukonConfig), // preprocessing logic before APIs are called
+    require('./middlewares/preApi')(app, yukonConfig), // preprocessing logic before APIs are called
 
     config.appDoApi   || passThrough,
-    require('./doApi')(app, yukonConfig), // handles all API calls in parallel
+    require('./middlewares/doApi')(app, yukonConfig), // handles all API calls in parallel
 
     config.appPostApi || passThrough,
-    require('./postApi')(app, yukonConfig), // common post-processing logic after all APIs return
+    require('./middlewares/postApi')(app, yukonConfig), // common post-processing logic after all APIs return
 
     config.appFinish  || passThrough,
-    require('./finish')(app, yukonConfig), // finish with json or html
+    require('./middlewares/finish')(app, yukonConfig), // finish with json or html
   ];
   
   // nodulejs finds and loads nodules based on config below, registers routes with express based on nodule route and other properties
-  require('nodulejs')(app, yukonConfig); 
+  nodulejs(app, yukonConfig); 
 };
 
 function passThrough(req, res, next) {
@@ -30,14 +32,11 @@ function passThrough(req, res, next) {
 }
 
 var defaultConfig =  {
-  // called at the start of every api or stub call
-  beforeApiCall: null,
+  // called at the start of every api call
+  apiCallBefore: null,
 
   // called after every api call
-  afterApiCall: null,
-
-  // called after every stub call
-  afterStubCall: null,
+  apiCallback: null,
 
   // default debug function
   yukonCustomDebug: function(identifier) {   
@@ -51,7 +50,8 @@ var defaultConfig =  {
     // route (REQUIRED) - needs to be defined in each nodule, and be unique
     // routeVerb - (default:get)
     // routeIndex - (default:0)
-    // middlewares - array of middleware functions to be executed on each request, defined in yukon module init
+    // middlewares - array of middleware functions (or function that returns array of middleware functions)
+    //             - to be executed on each request, defined above module init
 
     // NOTE: the params below call be mutated in the preProcessor using this.myParam notation
     //       they can also be mutated in the postProcessor if the API calls are not dependent on them (IE - templateName)
@@ -94,7 +94,7 @@ var defaultConfig =  {
     path: null,
 
     // params to send to API server
-    // if verb is 'post', this can be a deep json object (apiBodyType=json) or a shallow object of name value pairs (apiBodyType=form)
+    // if verb is 'post', this can be a deep json object (bodyType=json) or a shallow object of name value pairs (bodyType=form)
     params: {},
 
     // valid values: get, post, put, del (express uses 'del' since delete is a reserved word)
@@ -102,6 +102,9 @@ var defaultConfig =  {
 
     // valid values: json, form (use 'form' for a standard post submit with name/value pairs - everything wants json body)
     bodyType: 'json',
+
+    // custom headers to sent to API
+    customHeaders: [],
 
     // (numeric) - max API return time in ms
     timeout: null,

@@ -1,4 +1,4 @@
-// called dead last in middleware chain, sends response to client
+// called last in middleware chain, sends response to client
 
 module.exports = function(app, config) {
 

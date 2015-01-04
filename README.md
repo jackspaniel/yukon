@@ -1,4 +1,4 @@
-yukon
+yukon API framework
 =====
 
 Node component discovery and initialization interface

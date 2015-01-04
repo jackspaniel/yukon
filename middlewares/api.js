@@ -1,6 +1,9 @@
-var fs = require('fs');
+// custom middleware invoked by doAPI (not express middleware)
+// handles individual API or stub call
+
 var path = require('path');
 var sa = require('superagent');
+var fs = require('fs');
 var _ = require('lodash');
 
 module.exports = function(app, config) {
@@ -27,13 +30,13 @@ module.exports = function(app, config) {
 
     var callArgs = _.assign(_.cloneDeep(config.apiDefaults), args);
     callArgs.paramMethod = (callArgs.verb === 'get') ? 'query' : 'send';
+    
+    config.apiCallBefore(callArgs, req, res);
+
+    if (callArgs.host) callArgs.path = callArgs.host + callArgs.path;
 
     // MAGIC ALERT: if path ends with '/', assume it gets an id from the express request :id matcher
     callArgs.path = callArgs.path.match(/\/$/) ? callArgs.path + req.params.id : callArgs.path;
-    
-    console.log(callArgs);
-
-    config.beforeApiCall(callArgs, req, res);
 
     var call = sa
                  [callArgs.verb](callArgs.path)
@@ -55,8 +58,8 @@ module.exports = function(app, config) {
       callArgs.apiError = err;
       callArgs.apiResponse = response;
 
-      if (config.afterApiCall)
-        config.afterApiCall(callArgs, req, res, next);
+      if (config.apiCallback)
+        config.apiCallback(callArgs, req, res, next);
       else 
         next(err);
     });
@@ -79,15 +82,16 @@ module.exports = function(app, config) {
       debug('stub found!, namespace='+callArgs.namespace);
     }
     catch(e) {
-      debug('stub not found!');
-      next();
+      next(new Error(debug('stub not found!')));
       return;
     }
 
+    callArgs.apiResponse = {statusCode: 'STUB', req: {path: 'STUB: '+stubName}};
+
     res.locals[callArgs.namespace] = JSON.parse(data);
     
-    if (config.afterStubCall)
-      config.afterStubCall(callArgs, req, res, next);
+    if (config.apiCallback)
+      config.apiCallback(callArgs, req, res, next);
     else 
       next();
   }

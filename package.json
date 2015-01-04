@@ -1,6 +1,6 @@
 {
   "name": "yukon",
-  "version": "0.0.5",
+  "version": "0.0.13",
   "description": "Self-discovering component-based API-driven framework based on express",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,15 @@
   "homepage": "https://github.com/jackspaniel/yukon",
   "dependencies": {
     "lodash": "^2.4.1",
+    "nodulejs": "^1.1.11",
     "superagent": "^0.21.0"
+  },
+  "devDependencies": {
+    "body-parser": "^1.10.1",
+    "express": "^4.10.6",
+    "jade": "^1.8.2",
+    "mocha": "^2.1.0",
+    "supertest": "^0.15.0"
   },
   "readme": "yukon\n=====\n\nNode component discovery and initialization interface\n",
   "readmeFilename": "README.md",
