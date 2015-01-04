@@ -16,7 +16,7 @@ module.exports = function(app) {
     // NOTE: if using a function, it is executed at app init time, not request time
     middlewares: [
       function(req, res, next) {
-        req.nodule.debug('404 error middleware called!');
+        req.nodule.debug('404 error middleware called! for ' + req.path);
         res.send('<html><body><h1>404 error!</h1></body></html>');
       }
     ]

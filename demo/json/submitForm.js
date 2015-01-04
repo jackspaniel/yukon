@@ -7,18 +7,25 @@ module.exports = function(app) {
 
     routeVerb: 'post', // default = get       
     
-    doPreFormBusinessLogic: function(req, res) {
-      this.debug('doPreFormBusinessLogic called');
-      // process form parameters etc
-      this.dbParams = {param1: req.body ? req.body.param1 : null}; // in real life don't forget to sanitize query params!
+    apiCalls: [{
+      path: '/api/submitform',
+      verb: 'post',
+      bodyType: 'form', // default = 'json', express bodyParser turns both into req.body JSON object so it doesn't matter here
+    }],
+
+    preProcessor: function(req, res) {
+      this.debug('preProcessor called');
+
+      // in real life don't forget to sanitize query params!
+      this.apiCalls[0].params = req.body;
     },
 
-    doPostFormBusinessLogic: function(req, res) {
-      this.debug('doPostFormBusinessLogic called');
+    postProcessor: function(req, res) {
+      this.debug('postProcessor called');
       
-      // process data before sending to client
-      if (req.nodule.responseData.dbMsg.indexOf('valid data') === -1)
-        this.customMsg = 'Form submit failed, please supply valid param1';
+      res.renderData = {
+        msg: res.locals.data1.msg
+      };
     }
   };
 };

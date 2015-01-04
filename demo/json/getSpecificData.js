@@ -11,11 +11,25 @@ module.exports = function(app) {
     // routes registered first take precedence
     routeIndex: -1,
 
-    doNoduleBusinessLogic: function(req, res) {
-      this.debug('doNoduleBusinessLogic called');
+    apiCalls: [{
+      path: '/api/getdata/special/',
+      params: {myParam:'specialsauce'}, // example of static api param set at app-init time
+    }],
 
-      this.customId = req.params[0];
-      this.customMsg = 'getData called with special ID = ' + this.customId + ', doing special things';
+    preProcessor: function(req, res) {
+      this.debug('preProcessor called');
+
+      this.apiCalls[0].path +=  req.params[0]; // adding id to api path when route :id isn't present
+    },
+
+    postProcessor: function(req, res) {
+      this.debug('postProcessor called');
+
+      // sent as JSON to client
+      res.renderData = {
+        systemMsg: res.locals.data1.systemMsg,
+        msg: res.locals.data1.msg
+      };
     }
   };
 };
