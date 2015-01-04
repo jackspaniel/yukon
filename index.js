@@ -32,14 +32,11 @@ function passThrough(req, res, next) {
 }
 
 var defaultConfig =  {
-  // called at the start of every api or stub call
-  beforeApiCall: null,
+  // called at the start of every api call
+  apiCallBefore: null,
 
   // called after every api call
-  afterApiCall: null,
-
-  // called after every stub call
-  afterStubCall: null,
+  apiCallback: null,
 
   // default debug function
   yukonCustomDebug: function(identifier) {   
@@ -105,6 +102,9 @@ var defaultConfig =  {
 
     // valid values: json, form (use 'form' for a standard post submit with name/value pairs - everything wants json body)
     bodyType: 'json',
+
+    // custom headers to sent to API
+    customHeaders: [],
 
     // (numeric) - max API return time in ms
     timeout: null,
