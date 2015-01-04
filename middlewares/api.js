@@ -31,7 +31,7 @@ module.exports = function(app, config) {
     var callArgs = _.assign(_.cloneDeep(config.apiDefaults), args);
     callArgs.paramMethod = (callArgs.verb === 'get') ? 'query' : 'send';
     
-    config.beforeApiCall(callArgs, req, res);
+    config.apiCallBefore(callArgs, req, res);
 
     if (callArgs.host) callArgs.path = callArgs.host + callArgs.path;
 
@@ -58,8 +58,8 @@ module.exports = function(app, config) {
       callArgs.apiError = err;
       callArgs.apiResponse = response;
 
-      if (config.afterApiCall)
-        config.afterApiCall(callArgs, req, res, next);
+      if (config.apiCallback)
+        config.apiCallback(callArgs, req, res, next);
       else 
         next(err);
     });
@@ -86,10 +86,12 @@ module.exports = function(app, config) {
       return;
     }
 
+    callArgs.apiResponse = {statusCode: 'STUB', req: {path: 'STUB: '+stubName}};
+
     res.locals[callArgs.namespace] = JSON.parse(data);
     
-    if (config.afterApiCall)
-      config.afterApiCall(callArgs, req, res, next);
+    if (config.apiCallback)
+      config.apiCallback(callArgs, req, res, next);
     else 
       next();
   }
