@@ -292,7 +292,7 @@ For more examples see the [Kitchen Sink](https://github.com/jackspaniel/yukon/bl
 ## License
 ### MIT
 
-[npm-image]: https://img.shields.io/npm/v/nodulejs.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/nodulejs
-[downloads-image]: https://img.shields.io/npm/dm/nodulejs.svg?style=flat
-[downloads-url]: https://npmjs.org/package/ndoulejs
+[npm-image]: https://img.shields.io/npm/v/yukon.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/yukon
+[downloads-image]: https://img.shields.io/npm/dm/yukon.svg?style=flat
+[downloads-url]: https://npmjs.org/package/yukon
