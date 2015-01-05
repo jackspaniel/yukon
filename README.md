@@ -3,7 +3,7 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
-yukon is a component-based framework built on top of node/express - which calls 0-n REST APIs in parallel - and extends the [nodulejs framework](https://github.com/jackspaniel/nodulejs). 
+yukon is a component-based framework built on top of node/express - which processes 0-n REST APIs in parallel for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
 
 "nodules" are self-discovering, self-initializing web components, which propagate throughout the express middleware chain as __req.nodule__. nodulejs was split off from yukon to separate out the core self-discovery and initialization features - which could be used as a potential building block for a wide variety of frameworks.
 
