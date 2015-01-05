@@ -29,8 +29,8 @@ module.exports = function(app, config) {
     debug('callApi called, namespace = ' + args.namespace);
 
     var callArgs = _.assign(_.cloneDeep(config.apiDefaults), args);
-    callArgs.paramMethod = (callArgs.verb === 'get') ? 'query' : 'send';
-    
+    callArgs.paramMethod = (callArgs.verb !== 'get' && callArgs.bodyType === 'json') ? 'send' : 'query';
+   
     config.apiCallBefore(callArgs, req, res);
 
     if (callArgs.host) callArgs.path = callArgs.host + callArgs.path;

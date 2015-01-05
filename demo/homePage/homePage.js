@@ -1,4 +1,17 @@
-// basic page example with multiple API calls, serving multiple routes, setting nodule propertes at request time
+// BASIC PAGE EXAMPLE
+
+// FEATURES DEMONSTRATED:
+// multiple routes (nodulejs functionality)
+// multiple API calls
+// adding API params at request time
+// "magic" templateName based on this filename
+// alternate templateName set at request time
+// pre and post API business logic
+// creating res.renderData object which goes to template as base object
+// global API call is added by app (res.renderData.globalNav)
+// preApi and postApi middlware functions (res.renderData.globalNav.deviceType)
+
+// for more demonstration of yukon features - see kitchenSink.js, getSpecificData.js, getData.js, 404.js, submitForm.js
 
 module.exports = function(app) {
   return {
@@ -14,7 +27,7 @@ module.exports = function(app) {
     preProcessor: function(req, res) {
       this.debug('preProcessor called');
 
-      // MAGIC ALERT: if no templateName is specified the framework looks for [module name].[template extension]
+      // MAGIC ALERT: if no templateName is specified the framework looks for [module name].[template extension] (default=.jade)
 
       // example of specifying nodule properties at request time
       if (req.path.indexOf('special') > -1) {
@@ -34,6 +47,7 @@ module.exports = function(app) {
 
       // res.renderData is the base object sent to jade template
       res.renderData = {
+        globalNav: res.locals.globalNav,
         cmsData: res.locals.data1,
         myData: res.locals.data2,
         clientMsg: clientMsg

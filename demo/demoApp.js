@@ -13,6 +13,8 @@ module.exports = function(app, appConfig) {
 
   yukon(app, mergedConfig); 
 
+  app.use(handleErrors);
+
   debug = (appConfig.customDebug) 
           ? appConfig.customDebug('yukon->demoApp')
           : function(msg) { if (mergedConfig.debugToConsole) console.log('yukon->demoApp: ' + msg); };
@@ -89,7 +91,7 @@ function preApi(req, res, next) {
     // example of app-level logic - simple device detection (used to throughout middleware example)
     if (req.headers['user-agent'].match(/android/i))
       req.deviceType = 'Android';
-    else if (req.headers['user-agent'].match(/ipad/i))
+    else if (req.headers['user-agent'].match(/iphone/i))
       req.deviceType = 'iPhone';
     else if (req.headers['user-agent'].match(/ipad/i))
       req.deviceType = 'iPad';
@@ -161,9 +163,16 @@ function apiCallback(callArgs, req, res, next) {
     res.locals[callArgs.namespace].systemMsg = msg;
 
     // used by kitchen sink to test if API custom headers are being set
-    if (callArgs.apiResponse.req._headers && callArgs.apiResponse.req._headers['x-test'])
-      res.locals[callArgs.namespace].testHeader = callArgs.apiResponse.req._headers['x-test'];  
+    if (callArgs.apiResponse.req._headers)
+      res.locals[callArgs.namespace].customHeaders = callArgs.apiResponse.req._headers;  
 
     next();
   }
 }
+
+function handleErrors(err, req, res, next) {
+  debug('handleErrors called');
+  debug(err.stack || err.toString());
+  res.status(500).send('<h1>500 Server Error</h1><h3><pre>' + (err.stack || err) + '</pre></h3>');
+}
+
