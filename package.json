@@ -2,7 +2,7 @@
   "name": "yukon",
   "version": "0.0.14",
   "description": "Self-discovering component-based API-driven framework based on express",
-  "main": "index.js",
+  "main": "yukon.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
