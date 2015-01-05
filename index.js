@@ -1,3 +1,5 @@
+// add yukon default config to nodulejs default config
+
 var _ = require('lodash');
 var nodulejs = require('nodulejs');
 
@@ -84,7 +86,7 @@ var defaultConfig =  {
   },
 
   /// API CALL PROPERTIES ////////////////////////////////////////////////////////////////
-  /// NOTE: there can be multiple api calls per nodule, all called in parallel
+  /// there can be multiple api calls per nodule, all called in parallel
   apiDefaults: {
     // path to server, can be used to over-ride default 
     host: null, 
