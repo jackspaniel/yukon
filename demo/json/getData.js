@@ -23,7 +23,7 @@ module.exports = function(app) {
 
       // business logic before API calls are made
 
-      this.apiCalls[0].params = req.query.myParam; // in real life don't forget to sanitize query params!
+      this.apiCalls[0].params = {myParam: req.query.myParam}; // in real life don't forget to sanitize query params!
    },
     
     postProcessor: function(req, res) {
