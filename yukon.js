@@ -5,9 +5,8 @@ var nodulejs = require('nodulejs');
 
 module.exports = function(app, config) {
   var yukonConfig = _.merge(defaultConfig, config);
-  yukonConfig.debug = yukonConfig.customDebug || yukonConfig.yukonCustomDebug;
 
-  var debug = yukonConfig.debug('yukon->index');
+  var debug = yukonConfig.customDebug('yukon->index');
   debug('initializing');
   
   // array of middleware functions to be executed on each request
@@ -41,7 +40,7 @@ var defaultConfig =  {
   apiCallback: null,
 
   // default debug function
-  yukonCustomDebug: function(identifier) {   
+  customDebug: function(identifier) {   
     return function(msg) {
       if (defaultConfig.debugToConsole) console.log(identifier+': '+msg);
     };

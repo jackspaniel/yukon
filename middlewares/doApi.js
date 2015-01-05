@@ -1,7 +1,7 @@
-// calls all APIs in parallel (inlcuding those added by the app-level appDoApi middleware)
+// calls all APIs in parallel (inlcuding those added by the app-level appPreApi middleware)
 
 module.exports = function(app, config) {
-  var debug = config.debug('yukon->doApi');
+  var debug = config.customDebug('yukon->doApi');
 
   var api = require('./api.js')(app, config);
 

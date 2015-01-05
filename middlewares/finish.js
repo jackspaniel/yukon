@@ -3,7 +3,7 @@
 module.exports = function(app, config) {
 
   return function(req, res, next) {
-    config.debug('yukon->finish')('called');
+    config.customDebug('yukon->finish')('called');
 
     if (req.nodule.contentType === 'json')
       res.json(res.renderData);
