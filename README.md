@@ -45,7 +45,7 @@ Yukon config is broken into 3 sections:
 2. API-specific properties
 3. App-defined middleware functions and global settings
 
-*Note: You may occasionally see "MAGIC ALERT" below. This is for the handful of times where the framework does some convenience method that isn't immediately obvious, but comes up so much we felt the code saving was worth the loss in conceptual clarity.**
+*Note: You may occasionally see "MAGIC ALERT" below. This is for the handful of times where the framework does some convenience method that isn't immediately obvious, but comes up so much we felt the code saving was worth the loss in conceptual clarity.*
 
 ### Nodule-specific properties (config.noduleDefaults)
 
