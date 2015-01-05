@@ -1,6 +1,6 @@
 {
   "name": "yukon",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Self-discovering component-based API-driven framework based on express",
   "main": "yukon.js",
   "scripts": {
@@ -15,14 +15,14 @@
     "email": "jackspaniel99@gmail.com",
     "url": "https://github.com/jackspaniel"
   },
-  "license": "Apache 2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jackspaniel/yukon/issues"
   },
   "homepage": "https://github.com/jackspaniel/yukon",
   "dependencies": {
     "lodash": "^2.4.1",
-    "nodulejs": "^1.1.12",
+    "nodulejs": "^1.1.17",
     "superagent": "^0.21.0"
   },
   "devDependencies": {

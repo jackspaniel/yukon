@@ -8,8 +8,8 @@ module.exports = function(app, appConfig) {
   var mergedConfig = _.merge(config, appConfig || {});
   
   // initializing these here because they need a reference to app
-  mergedConfig.appDoApi = doApi(app);
-  mergedConfig.apiCallBefore = apiCallBefore(app);
+  mergedConfig.appPreApi = demoPreApi(app);
+  mergedConfig.apiCallBefore = demoApiCallBefore(app);
 
   yukon(app, mergedConfig); 
 
@@ -40,16 +40,16 @@ var config =  {
   /////////////////////////////////////////////////////////////  
 
   // middleware nvoked before yukon preApi, which calls nodule.preProcessor
-  appPreApi: preApi,
+  appStart: demoStart,
    
   // middleware invoked before yukon doApi, which makes all API calls in parallel and waits for all of them to return
-  appDoApi: null, // set in init since it needs app
+  appPreApi: null, // set in init since it needs app
   
   // middleware invoked before yukon postApi, which calls nodule.postProcessor
-  appPostApi: postApi,
+  appPostApi: demoPostApi,
   
   // middleware invoked before yukon finish, which renders template or sends JSON
-  appFinish: finish,
+  appFinish: demoFinish,
 
 
   /////////////////////////////////////////////////// 
@@ -60,7 +60,7 @@ var config =  {
   apiCallBefore: null, // set in init since it needs app
 
   // invoked after every API call - success or error
-  apiCallback: apiCallback,
+  apiCallback: demoApiCallback,
 
 
   //////////////////////////////////////////////////////////  
@@ -79,31 +79,31 @@ var config =  {
   }
 };
 
-function preApi(req, res, next) {
-    debug("preApi called");
+function demoStart(req, res, next) {
+  debug("demoStart called");
 
-    res.locals.pretty = true; // jade pretty setting - turn off at the component level if necessary
+  res.locals.pretty = true; // jade pretty setting - turn off at the component level if necessary
 
-    // example of setting nodule property globally
-    if (req.nodule.contentType !== 'html' && req.path.indexOf('/json/') === 0)
-      req.nodule.contentType = 'json'; 
+  // example of setting nodule property globally
+  if (req.nodule.contentType !== 'html' && req.path.indexOf('/json/') === 0)
+    req.nodule.contentType = 'json'; 
 
-    // example of app-level logic - simple device detection (used to throughout middleware example)
-    if (req.headers['user-agent'].match(/android/i))
-      req.deviceType = 'Android';
-    else if (req.headers['user-agent'].match(/iphone/i))
-      req.deviceType = 'iPhone';
-    else if (req.headers['user-agent'].match(/ipad/i))
-      req.deviceType = 'iPad';
-    else 
-      req.deviceType = 'web';
+  // example of app-level logic - simple device detection (used throughout middleware examples)
+  if (req.headers['user-agent'].match(/android/i))
+    req.deviceType = 'Android';
+  else if (req.headers['user-agent'].match(/iphone/i))
+    req.deviceType = 'iPhone';
+  else if (req.headers['user-agent'].match(/ipad/i))
+    req.deviceType = 'iPad';
+  else 
+    req.deviceType = 'web';
 
   next();
 }
 
-function doApi(app) {
+function demoPreApi(app) {
   return function(req, res, next) {
-    debug("doApi called");
+    debug("demoPreApi called");
 
     // example of how to *use stub/set nodule property* based on individual nodule or global config setting
     req.nodule.useStub = req.nodule.useStub || app.locals.useStubs;
@@ -116,8 +116,8 @@ function doApi(app) {
   };
 }
 
-function postApi(req, res, next) {
-  debug("postApi called");
+function demoPostApi(req, res, next) {
+  debug("demoPostApi called");
 
   // example of adding functionality globally after the API but before the nodule post processor is called
   if (res.locals.globalNav)
@@ -126,8 +126,8 @@ function postApi(req, res, next) {
   next();
 } 
 
-function finish(req, res, next) {
-  debug("finish called");
+function demoFinish(req, res, next) {
+  debug("demoFinish called");
 
   // example of adding functionality before the framework calls res.render or res.send
   if (req.nodule.contentType !== 'json')
@@ -138,7 +138,7 @@ function finish(req, res, next) {
   next();
 }
 
-function apiCallBefore(app) {
+function demoApiCallBefore(app) {
   return function(callArgs, req, res) {
     debug('callling API - ' + callArgs.verb + ': ' + callArgs.path);
 
@@ -150,8 +150,8 @@ function apiCallBefore(app) {
   };
 }
 
-function apiCallback(callArgs, req, res, next) {
-  if (callArgs.apiError && !callArgs.errorHandledByComponent) {
+function demoApiCallback(callArgs, req, res, next) {
+  if (callArgs.apiError && !callArgs.handleError) {
     debug(callArgs.apiError.stack || callArgs.apiError);
     next(new Error('API failed for '+callArgs.path +': '+callArgs.apiError));
   }

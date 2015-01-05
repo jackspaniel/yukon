@@ -4,7 +4,7 @@ var path = require('path');
 
 // wraps nodule.postProcessor, called after all API calls return
 module.exports = function(app, config) {
-  var debug = config.debug('yukon->postApi');
+  var debug = config.customDebug('yukon->postApi');
 
   return function(req, res, next) {
     debug("called");

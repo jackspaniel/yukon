@@ -7,7 +7,7 @@ var fs = require('fs');
 var _ = require('lodash');
 
 module.exports = function(app, config) {
-  var debug = config.debug('yukon->api');
+  var debug = config.customDebug('yukon->api');
 
   return { 
     getData: getData,
@@ -58,10 +58,8 @@ module.exports = function(app, config) {
       callArgs.apiError = err;
       callArgs.apiResponse = response;
 
-      if (config.apiCallback)
-        config.apiCallback(callArgs, req, res, next);
-      else 
-        next(err);
+      // IMPORTANT: this function must call next() and therefore must always be last in this block
+      config.apiCallback(callArgs, req, res, next);
     });
   }
 
@@ -90,9 +88,7 @@ module.exports = function(app, config) {
 
     res.locals[callArgs.namespace] = JSON.parse(data);
     
-    if (config.apiCallback)
-      config.apiCallback(callArgs, req, res, next);
-    else 
-      next();
+    // IMPORTANT: this function must call next() and therefore must always be last in this block
+    config.apiCallback(callArgs, req, res, next);
   }
 };
