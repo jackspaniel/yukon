@@ -3,9 +3,9 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
-yukon is a component-based framework built on top of node/express - which calls 0-N REST APIs in parallel - and extends the [nodulejs framework](https://github.com/jackspaniel/nodulejs). 
+yukon is a component-based framework built on top of node/express - which processes 0-n REST APIs in parallel for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
 
-"nodules" are self-discovering, self-initializing web components, which propagate throughout the express middleware chain as __req.nodule__. nodulejs was split off from yukon to separate out the core self-discovery and initialization features - which could be used as a potential building block for a wide variety of frameworks.
+"nodules" are self-discovering, self-initializing web components, which propagate throughout the express middleware chain as __req.nodule__. Nodulejs was split off from yukon to separate out the core self-discovery and initialization features. These potentially could be used as a building block for a wide variety of frameworks.
 
 ## Installation
 ```
@@ -17,10 +17,10 @@ $ npm install yukon
 require('yukon')(app, config); 
 ```
 + __app__ = express instance.
-+ __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a workin yukon app. See the Config section below more details on config options.
++ __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below more details on config options.
 
 ## What is a yukon nodule? 
-A __nodule__ is a self-discovering, self-initializing component that would be  to a JSP or PHP page in those worlds. A __yukon nodule__ extends the base nodule behavior to include back-end API calls, stub-handling and template-rendering. 
+A __nodule__ is a self-discovering, self-initializing component that would be  to a JSP or PHP page in those worlds. A __yukon nodule__ extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
 
 Unlike the PHP/JSP worlds however, a nodule's route is declared and not tied by default to the filename or folder structure. So you are free to re-organize nodules without upsetting urls. But more importantly, because nodules are self-discovering, there are no onerous config files to maintain (IE - Spring). This system allows a much more scalable architecture on large sites--as there are no config or other shared files which grow to enormous sizes as the site grows, and nodules can be re-organized with zero impact.
 
@@ -29,7 +29,7 @@ From a __feature-development point of view__, we wanted to give developers the f
 
 Our feature devs spend 80-90% of their effort in jade templates or on the client side. For them, node components are often just a pass-through to the API(s), with some business logic applied to the request on the way in, and api data on the way out. Ideally they should have to learn the as little as possible of the vagaries/plumbing/whatever-your-favorite-metaphor-for-framework-stuff of node. Creating a new node component should be as easy for them as creating a new JSP - but again, without the framework losing control of the middleware chain.
 
-From a __framework-development point of view__, we knew that as requirements evolved, we would constantly need to add default properties to each component, while hopefully causing as little disruption as possible to existing components. This is easily accomplished by adding a default property to the base config then specifying the property only in the nodules that need the new property.
+From a __framework-development point of view__, we knew that as requirements evolved, we would constantly need to add default properties to each component, while hopefully causing as little disruption as possible to existing components. This is easily accomplished by adding a default property to the base config, then specifying the property only in the nodules that need the new property.
 
 We also knew we'd need to add slices of business logic globally or semi-globally at any point in the request chain. By keeping control of the middleware chain we are able to do this with ease. 
 
@@ -45,11 +45,11 @@ Yukon config is broken into 3 sections:
 2. API-specific properties
 3. App-defined middleware functions and global settings
 
-*Note: You may occasionally see "MAGIC ALERT" below, this is for the handful of times where the framework does some convenience method that isn't immediately obvious, but comes up so much we felt the code saving was worth the loss in conceptual clarity.**
+*Note: You may occasionally see "MAGIC ALERT" below. This is for the handful of times where the framework does some convenience method that isn't immediately obvious, but comes up so much we felt the code saving was worth the loss in conceptual clarity.*
 
 ### Nodule-specific properties (config.noduleDefaults)
 
-Yukon inherits the 4 core [nodulejs]([yukon API framework](https://github.com/jackspaniel/nodulejs) defaults:
+Yukon inherits the 4 core [nodulejs](https://github.com/jackspaniel/nodulejs) defaults:
 
 1. __route__: <span style="color:grey">(REQUIRED)</span> one or more express routes - can be a string, RegExp, or array of either
 2. __routeVerb__: <span style="color:grey">(OPTIONAL, default=get)</span> get, post, put, del
@@ -85,7 +85,7 @@ Yukon defines the following properties for each API call. It is important to und
 
 ### App-defined middlware
 
-An app can create and use 4 optional express middleware functions, which splice in between the built-in yukon middleware (see [yukon.js](https://github.com/jackspaniel/yukon/blob/master/yukon.js) for more detail:
+An app can create and use 4 optional express middleware functions, which splice in between the built-in yukon middleware (see [yukon.js](https://github.com/jackspaniel/yukon/blob/master/yukon.js) for more detail):
 
 1. __appStart:__ called at start of middleware, before nodule.preProcessor
 2. __appPreApi:__ called after nodule.preProcessor, before API call(s)
@@ -99,7 +99,7 @@ An app can also create 2 global functions, which are executed before and after e
  
 ### Global properties
 
-There are also 3 global config properties inherited from [nodulejs]([yukon API framework](https://github.com/jackspaniel/nodulejs):
+There are also 3 global config properties inherited from [nodulejs](https://github.com/jackspaniel/nodulejs):
 
 1. __dirs__: <span color="grey">(OPTIONAL, default='/nodules')</span> *path(s) to look for your nodules, exclude property can be full or partal match* <br>__example:__ [{ path: '/app', exclude: ['demoApp.js', '.test.js', '/shared/'] }, { path: '/lib/nodules', exclude: ['.test.js'] }]
 2. __debugToConsole__: <span style="color:grey">(OPTIONAL, default=false)</span> *set to true to see nodulejs debug output in the console* 
@@ -292,7 +292,7 @@ For more examples see the [Kitchen Sink](https://github.com/jackspaniel/yukon/bl
 ## License
 ### MIT
 
-[npm-image]: https://img.shields.io/npm/v/nodulejs.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/nodulejs
-[downloads-image]: https://img.shields.io/npm/dm/nodulejs.svg?style=flat
-[downloads-url]: https://npmjs.org/package/ndoulejs
+[npm-image]: https://img.shields.io/npm/v/yukon.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/yukon
+[downloads-image]: https://img.shields.io/npm/dm/yukon.svg?style=flat
+[downloads-url]: https://npmjs.org/package/yukon
