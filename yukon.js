@@ -10,17 +10,18 @@ module.exports = function(app, config) {
   debug('initializing');
   
   // array of middleware functions to be executed on each request
+  // splicing app-defined middleware in-between yukon system middlware
   yukonConfig.noduleDefaults.middlewares = [
-    config.appPreApi  || passThrough,
-    require('./middlewares/preApi')(app, yukonConfig), // preprocessing logic before APIs are called
+    config.appStart,
+    require('./middlewares/preProcessor')(app, yukonConfig), // preprocessing logic before APIs are called
 
-    config.appDoApi   || passThrough,
+    config.appPreApi,
     require('./middlewares/doApi')(app, yukonConfig), // handles all API calls in parallel
 
-    config.appPostApi || passThrough,
-    require('./middlewares/postApi')(app, yukonConfig), // common post-processing logic after all APIs return
+    config.appPostApi,
+    require('./middlewares/postProcessor')(app, yukonConfig), // common post-processing logic after all APIs return
 
-    config.appFinish  || passThrough,
+    config.appFinish,
     require('./middlewares/finish')(app, yukonConfig), // finish with json or html
   ];
   
@@ -33,11 +34,34 @@ function passThrough(req, res, next) {
 }
 
 var defaultConfig =  {
-  // called at the start of every api call
-  apiCallBefore: null,
+  ///////////////////////////////////////////////////////////////// 
+  /// APP-DEFINED EXPRESS MIDDLEWARE FUNCTIONS INVOKED BY YUKON ///
+  /////////////////////////////////////////////////////////////////  
 
-  // called after every api call
-  apiCallback: null,
+  // called before nodule.preProcessor
+  appStart:  passThrough,
+ 
+  // called after nodule.preProcessor, before API call(s)
+  appPreApi: passThrough,
+ 
+  // called after API call(s), before nodule.postProcessor
+  appPostApi: passThrough,
+ 
+  // called after nodule.postProcessor, before res.send or res.render
+  appFinish: passThrough,
+
+
+  /////////////////////////////////////////////////// 
+  /// FUNCTIONS INVOKED PRE AND POST API BY YUKON ///
+  ///////////////////////////////////////////////////  
+  
+  // (OPTIONAL) synchronous function called at the start of every api call
+  apiCallBefore: function(callArgs, req, res) { },
+
+  // (OPTIONAL) asynchronous function called after every api call
+  // NOTE: must execute next() if defined
+  apiCallback: function(callArgs, req, res, next) { next(callArgs.apiError); },
+
 
   // default debug function
   customDebug: function(identifier) {   
@@ -80,7 +104,7 @@ var defaultConfig =  {
     error: null,
 
     // array of apiCalls to call in parallel
-    // NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the appDoApi middleware
+    // NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the appPreApi middleware
     apiCalls: [],
   },
 
@@ -101,7 +125,7 @@ var defaultConfig =  {
     // valid values: get, post, put, del (express uses 'del' since delete is a reserved word)
     verb: 'get',
 
-    // valid values: json, form (use 'form' for a standard post submit with name/value pairs - everything wants json body)
+    // valid values: json, form
     bodyType: 'json',
 
     // custom headers to sent to API
