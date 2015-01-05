@@ -49,7 +49,7 @@ Yukon config is broken into 3 sections:
 
 ### Nodule-specific properties (config.noduleDefaults)
 
-Yukon inherits the 4 core [nodulejs]([yukon API framework](https://github.com/jackspaniel/nodulejs) defaults:
+Yukon inherits the 4 core [nodulejs](https://github.com/jackspaniel/nodulejs) defaults:
 
 1. __route__: <span style="color:grey">(REQUIRED)</span> one or more express routes - can be a string, RegExp, or array of either
 2. __routeVerb__: <span style="color:grey">(OPTIONAL, default=get)</span> get, post, put, del
