@@ -1,4 +1,11 @@
-// JSON request example using negative routeIndex to register more specific routes first
+// NEGATIVE ROUTE INDEX EXAMPLE - specific matching route is loaded ahead of more general matching route
+
+// FEATURES DEMONSTRATED:
+// using a RegExp in a route (express functionality)
+// using negative routeIndex to load a route first in the express route stack (nodulejs functionality)
+// modifying API path at request time
+
+// for more demonstration of yukon features - see kitchenSink.js, homePage.js, getData.js, 404.js, submitForm.js
 
 module.exports = function(app) {
   return {
@@ -25,7 +32,6 @@ module.exports = function(app) {
     postProcessor: function(req, res) {
       this.debug('postProcessor called');
 
-      // sent as JSON to client
       res.renderData = {
         systemMsg: res.locals.data1.systemMsg,
         msg: res.locals.data1.msg

@@ -1,3 +1,5 @@
+// simulates API call for testing and demo app
+
 module.exports = function(app) {
   return {
     route : '/api/data/specialhome',

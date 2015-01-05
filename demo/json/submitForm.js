@@ -1,4 +1,16 @@
-// basic post form-submit example
+// BASIC FORM SUBMIT EXAMPLE
+
+// FEATURES DEMONSTRATED:
+// setting route verb to POST
+// setting API verb to POST
+// setting api body request type to 'form' ('form'=url-encoded, 'json'=json body)
+// adding API params at request time
+// pre and post API business logic
+// creting res.renderData object which goes to template as base object
+
+// for more demonstration of yukon features - see kitchenSink.js, getSpecificData.js, getData.js, 404.js, homePage.js
+
+var _ = require('lodash');
 
 module.exports = function(app) {
   return {
@@ -10,21 +22,33 @@ module.exports = function(app) {
     apiCalls: [{
       path: '/api/submitform',
       verb: 'post',
-      bodyType: 'form', // default = 'json', express bodyParser turns both into req.body JSON object so it doesn't matter here
+      bodyType: 'form', // default = 'json'
     }],
 
     preProcessor: function(req, res) {
       this.debug('preProcessor called');
+      
+      // process request parameters, do business logic here before calling API(s)
 
       // in real life don't forget to sanitize query params!
-      this.apiCalls[0].params = req.body;
+      if (!_.isEmpty(req.body)) {
+        // change form body type sent to API
+        this.apiCalls[0].bodyType = 'json';
+
+        this.apiCalls[0].params = req.body; // JSON body
+      }
+      else {
+        this.apiCalls[0].params = req.query; // url-encoded
+      }
     },
 
     postProcessor: function(req, res) {
       this.debug('postProcessor called');
+
+      // process API results here before sending data to jade/client
       
       res.renderData = {
-        msg: res.locals.data1.msg
+        response: res.locals.data1
       };
     }
   };

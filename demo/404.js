@@ -1,5 +1,10 @@
-// example of using high routeIndex to register route last and catch all routes not specifically handled 
-// example of using custom non-standard middleware array 
+// 404 "CATCH ALL" EXAMPLE - high route index is used to load '*' route last
+
+// FEATURES DEMONSTRATED:
+// using high routeIndex to load a route last in the express route stack (nodulejs functionality)
+// custom middleware array (bypasses standard app/yukon middleware chain)
+
+// for more demonstration of yukon features - see kitchenSink.js, homePage.js, getData.js, getSpecificData.js, submitForm.js
 
 module.exports = function(app) {
   return {
@@ -12,8 +17,6 @@ module.exports = function(app) {
     routeIndex: 1000,
   
     // example of using custom non-standard middleware array 
-    // can also be a function(nodule) which returns an array of middleware functions (see demoApp.js for example)
-    // NOTE: if using a function, it is executed at app init time, not request time
     middlewares: [
       function(req, res, next) {
         req.nodule.debug('404 error middleware called! for ' + req.path);
