@@ -17,7 +17,7 @@ $ npm install yukon
 require('yukon')(app, config); 
 ```
 + __app__ = express instance.
-+ __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a workin yukon app. See the Config section below more details on config options.
++ __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below more details on config options.
 
 ## What is a yukon nodule? 
 A __nodule__ is a self-discovering, self-initializing component that would be  to a JSP or PHP page in those worlds. A __yukon nodule__ extends the base nodule behavior to include back-end API calls, stub-handling and template-rendering. 
