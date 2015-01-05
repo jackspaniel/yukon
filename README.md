@@ -99,7 +99,7 @@ An app can also create 2 global functions, which are executed before and after e
  
 ### Global properties
 
-There are also 3 global config properties inherited from [nodulejs]([yukon API framework](https://github.com/jackspaniel/nodulejs):
+There are also 3 global config properties inherited from [nodulejs](https://github.com/jackspaniel/nodulejs):
 
 1. __dirs__: <span color="grey">(OPTIONAL, default='/nodules')</span> *path(s) to look for your nodules, exclude property can be full or partal match* <br>__example:__ [{ path: '/app', exclude: ['demoApp.js', '.test.js', '/shared/'] }, { path: '/lib/nodules', exclude: ['.test.js'] }]
 2. __debugToConsole__: <span style="color:grey">(OPTIONAL, default=false)</span> *set to true to see nodulejs debug output in the console* 
