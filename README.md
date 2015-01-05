@@ -106,7 +106,8 @@ There are also 3 global config properties inherited from [nodulejs](https://gith
 3. __customDebug__: <span style="color:grey">(OPTIONAL)</span> *custom debug function* <br>__example:__ function(identifier) { return function(msg){... your debug function here ...} }
 
 ### To Run Node Tests
-```
+[Download yukon](https://github.com/jackspaniel/yukon/archive/master.zip)
+```shell
 $ npm install
 $ make test 
 ```
