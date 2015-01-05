@@ -85,7 +85,7 @@ Yukon defines the following properties for each API call. It is important to und
 
 ### App-defined middlware
 
-An app can create and use 4 optional express middleware functions, which splice in between the built-in yukon middleware (see [yukon.js](https://github.com/jackspaniel/yukon/blob/master/yukon.js) for more detail:
+An app can create and use 4 optional express middleware functions, which splice in between the built-in yukon middleware (see [yukon.js](https://github.com/jackspaniel/yukon/blob/master/yukon.js) for more detail):
 
 1. __appStart:__ called at start of middleware, before nodule.preProcessor
 2. __appPreApi:__ called after nodule.preProcessor, before API call(s)
