@@ -3,6 +3,17 @@
   "version": "0.1.2",
   "description": "Self-discovering component-based API-driven framework based on express",
   "main": "yukon.js",
+  "keywords": [
+    "parallel",
+    "parallel API",
+    "API",
+    "nodule",
+    "nodulejs",
+    "self-discovering",
+    "framework",
+    "component-based",
+    "component-based framework"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
