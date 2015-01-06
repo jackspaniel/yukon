@@ -4,6 +4,7 @@
   "description": "Self-discovering API-driven web components",
   "main": "yukon.js",
   "keywords": [
+    "api back-end",
     "parallel",
     "parallel API",
     "API",
