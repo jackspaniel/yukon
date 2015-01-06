@@ -107,12 +107,13 @@ There are also 3 global config properties inherited from [nodulejs](https://gith
 
 ### To Run Node Tests
 ```
+Download yukon - https://github.com/jackspaniel/yukon/archive/master.zip
 $ npm install
 $ make test 
 ```
-
 ## To Do
 1. Stop populating res.locals and res.renderData with API response data. All API response data and errors should be tacked on to the req.nodules.callArgs[namespace] object. (Maybe rename callArgs to something a little less arg-y?) An app can add these convenience shortcuts if desired.
+2. Reconside stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
 2. Get demoApp working as standalone.
 3. Write more detailed unit tests?
 4. Hook up Travis CI and code coverage.
