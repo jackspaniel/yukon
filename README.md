@@ -11,6 +11,8 @@ module.exports = function(app) {
   return {
   
     route: '/home', 
+    
+    templateName: 'homePage.jade',
 
     apiCalls: [
       {path: '/api/cms/home'},
