@@ -42,9 +42,11 @@ require('yukon')(app, config);
 + __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below for more details. 
 
 ## What is a yukon nodule? 
-A __nodule__ is a self-discovering, self-initializing component that would be  to a JSP or PHP page in those worlds. A __yukon nodule__ extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
+A __nodule__ is a self-discovering, self-initializing web component, which propagates throughout the express middleware chain as __req.nodule__. A __yukon nodule__ extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
 
-Unlike the PHP/JSP worlds however, a nodule's route is declared and not tied by default to the filename or folder structure. So you are free to re-organize nodules without upsetting urls. But more importantly, because nodules are self-discovering, there are no onerous config files to maintain (IE - Spring). This system allows a much more scalable architecture on large sites--as there are no config or other shared files which grow to enormous sizes as the site grows, and nodules can be re-organized with zero impact.
+*Nodulejs was split off from yukon to separate out the core self-discovery and initialization features, as these potentially could be used as a building block for a wide variety of frameworks.*
+
+A nodule is analogous to a JSP or PHP page in those worlds. Unlike PHP/JSP behavior however, a nodule's route is declared and not tied by default to the filename or folder structure. So you are free to re-organize nodules without upsetting urls. More importantly, because nodules are self-discovering, there are no onerous config files to maintain (IE - Spring). This system allows a much more scalable architecture on large sites--as there are no config or other shared files which grow to enormous sizes as the site grows, and nodules can be re-organized with zero impact.
 
 ## Motivation 
 From a __feature-development point of view__, we wanted to give developers the flexibility of [component-based architecture](http://en.wikipedia.org/wiki/Component-based_software_engineering) as much as possible, but still keep system-wide control over the middleware chain. On a small site with a small development team the latter might not be an issue. But on a large site with devs scattered all over the globe, some kind of middleware sandbox was a necessity. 
