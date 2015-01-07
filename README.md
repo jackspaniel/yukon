@@ -42,7 +42,7 @@ require('yukon')(app, config);
 + __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below for more details. 
 
 ## What is a yukon nodule? 
-A *__nodule__* is a self-discovering, self-initializing web component, which propagates throughout the express middleware chain as req.nodule. A *__yukon nodule__* extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
+A *__nodule__* is a self-discovering, self-registering web component tied to one or more express routes. With each incoming request, a nodule instance propagates throughout the express middleware chain as req.nodule. A *__yukon nodule__* extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
 
 *Nodulejs was split off from yukon to separate out the core self-discovery and initialization features, which can potentially be a building block for a wide variety of node applications or frameworks.*
 
