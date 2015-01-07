@@ -5,7 +5,7 @@
 
 yukon is a component-based framework built on top of node/express - which processes 0-n REST APIs in parallel for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
 
-A really simple yukon nodule looks like this:
+A really simple yukon component looks like this:
 ```js
 module.exports = function(app) {
   return {
