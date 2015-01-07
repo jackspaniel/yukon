@@ -5,8 +5,6 @@
 
 yukon is a component-based framework built on top of node/express - which processes 0-n REST APIs in parallel for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
 
-"nodules" are self-discovering, self-initializing web components, which propagate throughout the express middleware chain as __req.nodule__. Nodulejs was split off from yukon to separate out the core self-discovery and initialization features. These potentially could be used as a building block for a wide variety of frameworks.
-
 A really simple yukon nodule looks like this:
 ```js
 module.exports = function(app) {
@@ -29,6 +27,7 @@ module.exports = function(app) {
   };
 };
 ```
+"nodules" are self-discovering, self-initializing web components, which propagate throughout the express middleware chain as __req.nodule__. Nodulejs was split off from yukon to separate out the core self-discovery and initialization features. These potentially could be used as a building block for a wide variety of frameworks.
 
 ## Installation
 ```
