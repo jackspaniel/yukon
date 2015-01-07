@@ -120,8 +120,8 @@ function demoPostApi(req, res, next) {
   debug("demoPostApi called");
 
   // example of adding functionality globally after the API but before the nodule post processor is called
-  if (res.locals.globalNav)
-    res.locals.globalNav.deviceType = req.deviceType;
+  if (res.yukon.globalNav)
+    res.yukon.globalNav.deviceType = req.deviceType;
 
   next();
 } 
@@ -131,9 +131,9 @@ function demoFinish(req, res, next) {
 
   // example of adding functionality before the framework calls res.render or res.send
   if (req.nodule.contentType !== 'json')
-    res.renderData.deviceType = req.deviceType;
+    res.yukon.renderData.deviceType = req.deviceType;
   else
-    res.locals.clientData = {deviceType: req.deviceType};
+    res.yukon.renderData.clientData = {deviceType: req.deviceType};
 
   next();
 }
@@ -160,11 +160,11 @@ function demoApiCallback(callArgs, req, res, next) {
     debug(msg);
     
     // example of app-level logic on every api response (remember there can be multiple API calls per request)
-    res.locals[callArgs.namespace].systemMsg = msg;
+    res.yukon[callArgs.namespace].systemMsg = msg;
 
     // used by kitchen sink to test if API custom headers are being set
     if (callArgs.apiResponse.req._headers)
-      res.locals[callArgs.namespace].customHeaders = callArgs.apiResponse.req._headers;  
+      res.yukon[callArgs.namespace].customHeaders = callArgs.apiResponse.req._headers;  
 
     next();
   }

@@ -96,9 +96,9 @@ var defaultConfig =  {
 
     // use to process data returned from the API before calling template or sending back to client as JSON
     postProcessor: function(req, res) { },
-    // NOTE: one important property you usually need to set in the postProcessor is res.renderData 
+    // NOTE: one important property you usually need to set in the postProcessor is res.yukon.renderData 
     //       this is the data sent to the jade template or back to the client as JSON
-    // MAGIC ALERT: if you don't specify res.renderData the framework sets res.renderData = res.locals.data1
+    // MAGIC ALERT: if you don't specify res.yukon.renderData the framework sets res.yukon.renderData = res.yukon.data1
 
     // set this.error to an Error() instance to call next(error) inside the preProcessor or postProcessor
     error: null,

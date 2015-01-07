@@ -32,9 +32,9 @@ module.exports = function(app) {
     postProcessor: function(req, res) {
       this.debug('postProcessor called');
 
-      res.renderData = {
-        systemMsg: res.locals.data1.systemMsg,
-        msg: res.locals.data1.msg
+      res.yukon.renderData = {
+        systemMsg: res.yukon.data1.systemMsg,
+        msg: res.yukon.data1.msg
       };
     }
   };

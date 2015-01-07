@@ -6,7 +6,7 @@
 // setting api body request type to 'form' ('form'=url-encoded, 'json'=json body)
 // adding API params at request time
 // pre and post API business logic
-// creting res.renderData object which goes to template as base object
+// creting res.yukon.renderData object which goes to template as base object
 
 // for more demonstration of yukon features - see kitchenSink.js, getSpecificData.js, getData.js, 404.js, homePage.js
 
@@ -47,8 +47,8 @@ module.exports = function(app) {
 
       // process API results here before sending data to jade/client
       
-      res.renderData = {
-        response: res.locals.data1
+      res.yukon.renderData = {
+        response: res.yukon.data1
       };
     }
   };

@@ -1,7 +1,7 @@
 // FEATURES TESTED:
 
 // setting global rule by app-defined middleware (anything in /json folder gets contentType = 'json')
-// setting global property (systemMsg) on res.renderData via middleware
+// setting global property (systemMsg) on res.yukon.renderData via middleware
 
 var expect  = require('expect');
 var request = require('supertest');

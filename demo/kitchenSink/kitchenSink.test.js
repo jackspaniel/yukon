@@ -27,7 +27,7 @@ module.exports = function(app) {
       request(app)
         .get('/kitchensink')
         .end(function(err, res) {
-          expect(res.text).toContain('res.locals.data2 = {"msg":"get data success!', 'res.text='+res.text);
+          expect(res.text).toContain('res.yukon.data2 = {"msg":"get data success!', 'res.text='+res.text);
           done();
         });
     });
@@ -77,7 +77,7 @@ module.exports = function(app) {
       request(app)
         .get('/bathroomtub/test')
         .end(function(err, res) {
-          expect(res.text).toContain('res.locals.data5 = {"msg":"get data success!', 'res.text='+res.text);
+          expect(res.text).toContain('res.yukon.data5 = {"msg":"get data success!', 'res.text='+res.text);
           done();
         });
     });
@@ -86,7 +86,7 @@ module.exports = function(app) {
       request(app)
         .get('/bathroomtub/myId')
         .end(function(err, res) {
-          expect(res.text).toContain('res.locals.data5 = {"msg":"get data success! id=myId', 'res.text='+res.text);
+          expect(res.text).toContain('res.yukon.data5 = {"msg":"get data success! id=myId', 'res.text='+res.text);
           done();
         });
     });

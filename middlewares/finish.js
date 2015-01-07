@@ -6,8 +6,8 @@ module.exports = function(app, config) {
     config.customDebug('yukon->finish')('called');
 
     if (req.nodule.contentType === 'json')
-      res.json(res.renderData);
+      res.json(res.yukon.renderData);
     else
-      res.render(res.templatePath, res.renderData);
+      res.render(res.templatePath, res.yukon.renderData);
   };
 };

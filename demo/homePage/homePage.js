@@ -7,9 +7,9 @@
 // "magic" templateName based on this filename
 // alternate templateName set at request time
 // pre and post API business logic
-// creating res.renderData object which goes to template as base object
-// global API call is added by app (res.renderData.globalNav)
-// preApi and postApi middlware functions (res.renderData.globalNav.deviceType)
+// creating res.yukon.renderData object which goes to template as base object
+// global API call is added by app (res.yukon.renderDataglobalNav)
+// preApi and postApi middlware functions (res.yukon.renderDataglobalNav.deviceType)
 
 // for more demonstration of yukon features - see kitchenSink.js, getSpecificData.js, getData.js, 404.js, submitForm.js
 
@@ -19,8 +19,8 @@ module.exports = function(app) {
     route: ['/', '/home', '/special'],
 
     apiCalls: [
-      {path: '/api/cms/home'},       // comes to postProcessor as res.locals.data1
-      {path: '/api/data/homeslices'} // comes to postProcessor as res.locals.data2
+      {path: '/api/cms/home'},       // comes to postProcessor as res.yukon.data1
+      {path: '/api/data/homeslices'} // comes to postProcessor as res.yukon.data2
     ],
   
     // business logic before API calls are made
@@ -41,15 +41,15 @@ module.exports = function(app) {
       this.debug('postProcessor called');
 
       // example of post API business logic
-      var clientMsg = res.locals.data2.specialMsg || res.locals.data2.msg;
+      var clientMsg = res.yukon.data2.specialMsg || res.yukon.data2.msg;
 
-      // MAGIC ALERT: if no res.renderData isn't specified, the framework uses res.locals.data1
+      // MAGIC ALERT: if no res.yukon.renderData isn't specified, the framework uses res.yukon.data1
 
-      // res.renderData is the base object sent to jade template
-      res.renderData = {
-        globalNav: res.locals.globalNav,
-        cmsData: res.locals.data1,
-        myData: res.locals.data2,
+      // res.yukon.renderData is the base object sent to jade template
+      res.yukon.renderData = {
+        globalNav: res.yukon.globalNav,
+        cmsData: res.yukon.data1,
+        myData: res.yukon.data2,
         clientMsg: clientMsg
       };
     }
