@@ -3,7 +3,7 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
-yukon is a component-based framework built on top of node/express - which processes 0-n REST APIs in parallel for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
+yukon is a component-based framework built on top of node/express - which makes 0-n asynchronous REST API calls in parallel to provide back-end data for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
 
 A really simple yukon component looks like this:
 ```js
