@@ -1,6 +1,6 @@
 {
   "name": "yukon",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Self-discovering API-driven web components",
   "main": "yukon.js",
   "keywords": [
