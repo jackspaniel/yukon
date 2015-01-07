@@ -44,7 +44,7 @@ require('yukon')(app, config);
 ## What is a yukon nodule? 
 A *__nodule__* is a self-discovering, self-initializing web component, which propagates throughout the express middleware chain as req.nodule. A *__yukon nodule__* extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
 
-*Nodulejs was split off from yukon to separate out the core self-discovery and initialization features, as these potentially could be used as a building block for a wide variety of frameworks.*
+*Nodulejs was split off from yukon to separate out the core self-discovery and initialization features, which can potentially be a building block for a wide variety of node applications or frameworks.*
 
 A nodule is analogous to a JSP or PHP page in those worlds. Unlike PHP/JSP behavior however, a nodule's route is declared and not tied by default to the filename or folder structure. So you are free to re-organize nodules without upsetting urls. More importantly, because nodules are self-discovering, there are no onerous config files to maintain (IE - Spring). This system allows a much more scalable architecture on large sites--as there are no config or other shared files which grow to enormous sizes as the site grows, and nodules can be re-organized with zero impact.
 
