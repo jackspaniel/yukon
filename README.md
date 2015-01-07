@@ -116,7 +116,7 @@ An app can create and use 4 optional express middleware functions, which splice 
 1. __appStart:__ called at start of middleware, before nodule.preProcessor
 2. __appPreApi:__ called after nodule.preProcessor, before API call(s)
 3. __appPostApi:__ called after API call(s), before nodule.postProcessor
-4. __appFinish:__ called after nodule.postProcessor, before res.send() or res.
+4. __appFinish:__ called after nodule.postProcessor, before res.send() or res.render().
 
 An app can also create 2 global functions, which are executed before and after every API call. It's important to understand that there can be several API calls per express request. So these functions are not in the standard middleware chain, although the api callback does make use of the middleware paradigm.
 
@@ -127,9 +127,9 @@ An app can also create 2 global functions, which are executed before and after e
 
 There are also 3 global config properties inherited from [nodulejs](https://github.com/jackspaniel/nodulejs):
 
-1. __dirs__: <span color="grey">(OPTIONAL, default='/nodules')</span> *path(s) to look for your nodules, exclude property can be full or partal match* <br>__example:__ [{ path: '/app', exclude: ['demoApp.js', '.test.js', '/shared/'] }, { path: '/lib/nodules', exclude: ['.test.js'] }]
-2. __debugToConsole__: <span style="color:grey">(OPTIONAL, default=false)</span> *set to true to see nodulejs debug output in the console* 
-3. __customDebug__: <span style="color:grey">(OPTIONAL)</span> *custom debug function* <br>__example:__ function(identifier) { return function(msg){... your debug function here ...} }
+1. __dirs__: <span color="grey">(OPTIONAL, default='/nodules')</span> path(s) to look for your nodules, exclude property can be full or partal match *<br>__example:__ [{ path: '/app', exclude: ['demoApp.js', '.test.js', '/shared/'] }, { path: '/lib/nodules', exclude: ['.test.js'] }]*
+2. __debugToConsole__: <span style="color:grey">(OPTIONAL, default=false)</span> set to true to see nodulejs debug output in the console
+3. __customDebug__: <span style="color:grey">(OPTIONAL)</span> custom debug function *<br>__example:__ function(identifier) { return function(msg){... your debug function here ...} }*
 
 ### To Run Node Tests
 ```
