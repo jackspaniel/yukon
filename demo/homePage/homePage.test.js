@@ -3,8 +3,8 @@
 // standard flow (home page loads with "magic" template based on filename)
 // nodule pre-API business logic function (changing template in preProcessor)
 // nodule post-API business logic function (changing client msg in postProcessor)
-// doApi middleware function - global API call should be added by app (res.renderData.globalNav)
-// preApi and postApi middlware functions - res.renderData.globalNav.deviceType should be added
+// doApi middleware function - global API call should be added by app (res.yukon.renderDataglobalNav)
+// preApi and postApi middlware functions - res.yukon.renderDataglobalNav.deviceType should be added
 
 var expect  = require('expect');
 var request = require('supertest');

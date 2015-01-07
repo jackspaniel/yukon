@@ -6,6 +6,8 @@ module.exports = function(app, config) {
 
     req.nodule.preProcessor(req, res);
 
+    res.yukon = {}; // set this here on the off chance app preApi needs to do something with it
+
     next();
   };
 };

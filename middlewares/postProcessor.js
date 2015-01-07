@@ -20,8 +20,8 @@ module.exports = function(app, config) {
     }
 
     // convenience method so devs don't have to set renderData for default single API case
-    if (!res.renderData)
-      res.renderData = res.locals.data1 || {};
+    if (!res.yukon.renderData)
+      res.yukon.renderData = res.yukon.data1 || {};
 
     if (req.nodule.contentType !== 'json') {
       // if template name is not specified assume (nodule name).(nodule extention)

@@ -42,7 +42,9 @@ require('yukon')(app, config);
 + __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below for more details. 
 
 ## What is a yukon nodule? 
-A *__nodule__* is a self-discovering, self-registering web component tied to one or more express routes. With each incoming request, a nodule instance propagates throughout the express middleware chain as req.nodule. A *__yukon nodule__* extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
+A *__nodule__* is a self-discovering, self-registering web component tied to one or more express routes. With each incoming request, a nodule instance propagates throughout the express middleware chain as req.nodule. 
+
+A *__yukon nodule__* extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. Yukon attaches data returned from the API(s) as the res.yukon object, and sends res.yukon.renderData to the template or straight back to the client as JSON.
 
 *Nodulejs was split off from yukon to separate out the core self-discovery and initialization features, which can potentially be a building block for a wide variety of node applications or frameworks.*
 
@@ -136,8 +138,7 @@ $ npm install
 $ make test 
 ```
 ## To Do
-1. Stop populating res.locals and res.renderData with API response data. All API response data and errors should be tacked on to the req.nodules.callArgs[namespace] object. (Maybe rename callArgs to something a little less arg-y?) An app can add these convenience shortcuts if desired.
-2. Reconside stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
+1. Reconsider stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
 2. Get demoApp working as standalone.
 3. Write more detailed unit tests?
 4. Hook up Travis CI and code coverage.
@@ -176,12 +177,12 @@ module.exports = function(app) {
     postProcessor: function(req, res) {
       this.debug('postProcessor called');
 
-      var clientMsg = res.locals.data2.specialMsg || res.locals.data2.msg;
+      var clientMsg = res.yukon.data2.specialMsg || res.yukon.data2.msg;
 
-      res.renderData = {
-        globalNav: res.locals.globalNav,
-        cmsData: res.locals.data1,
-        myData: res.locals.data2,
+      res.yukon.renderData = {
+        globalNav: res.yukon.globalNav,
+        cmsData: res.yukon.data1,
+        myData: res.yukon.data2,
         clientMsg: clientMsg
       };
     }
@@ -210,9 +211,9 @@ module.exports = function(app) {
     postProcessor: function(req, res) {
       this.debug('postProcessor called');
 
-       res.renderData = {
-         systemMsg: res.locals.data1.systemMsg,
-         data: res.locals.data1
+       res.yukon.renderData = {
+         systemMsg: res.yukon.data1.systemMsg,
+         data: res.yukon.data1
       };
     }
   };
@@ -252,8 +253,8 @@ module.exports = function(app) {
     postProcessor: function(req, res) {
       this.debug('postProcessor called');
 
-      res.renderData = {
-        response: res.locals.data1
+      res.yukon.renderData = {
+        response: res.yukon.data1
       };
     }
   };
@@ -301,11 +302,11 @@ function demoApiCallback(callArgs, req, res, next) {
     debug(msg); 
     
     // example of app-level logic on every api response (remember there can be multiple API calls per request)
-    res.locals[callArgs.namespace].systemMsg = msg;
+    res.yukon[callArgs.namespace].systemMsg = msg;
 
     // used by kitchen sink to test if API custom headers are being set
     if (callArgs.apiResponse.req._headers)
-      res.locals[callArgs.namespace].customHeaders = callArgs.apiResponse.req._headers;  
+      res.yukon[callArgs.namespace].customHeaders = callArgs.apiResponse.req._headers;  
 
     next();
   }

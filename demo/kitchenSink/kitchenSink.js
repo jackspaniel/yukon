@@ -27,7 +27,7 @@ module.exports = function(app) {
     route: ['/kitchensink', '/bathroomtub/:id'], // set :id = "specialsink" to test
 
     apiCalls: [
-      {path: '/api/cms/home'}, // comes to postProcessor as res.locals.data1
+      {path: '/api/cms/home'}, // comes to postProcessor as res.yukon.data1
       {path: '/api/getdata/kitchensink', params:{staticParam: 'test1'}},
       {path: '/api/getdata/somecall/', useStub: true},
       {path: '/api/getdata/someothercall/', useStub: true, stubPath: 'altKitchenSink'} 
@@ -72,12 +72,12 @@ module.exports = function(app) {
         return;
       }
 
-      res.renderData = {
-        data1: res.locals.data1,
-        data2: res.locals.data2,
-        data3: res.locals.data3,
-        data4: res.locals.data4,
-        data5: res.locals.data5,
+      res.yukon.renderData = {
+        data1: res.yukon.data1,
+        data2: res.yukon.data2,
+        data3: res.yukon.data3,
+        data4: res.yukon.data4,
+        data5: res.yukon.data5,
       };
     }
   };

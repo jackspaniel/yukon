@@ -4,7 +4,7 @@
 // "magic" adding :id route wildcard to API path ending in / (common REST paradigm)
 // adding API params at request time
 // pre and post API business logic
-// creting res.renderData object which is sent to client as JSON response
+// creting res.yukon.renderData object which is sent to client as JSON response
 
 // for more demonstration of yukon features - see kitchenSink.js, homePage.js, getSpecifcData.js, 404.js, submitForm.js
 
@@ -29,12 +29,12 @@ module.exports = function(app) {
     postProcessor: function(req, res) {
       this.debug('postProcessor called');
 
-      // business logic after all API calls return, before sending res.renderData to client in res.send()
+      // business logic after all API calls return, before sending res.yukon.renderData to client in res.send()
 
       // sent as JSON to client
-      res.renderData = {
-        systemMsg: res.locals.data1.systemMsg,
-        msg: res.locals.data1.msg
+      res.yukon.renderData = {
+        systemMsg: res.yukon.data1.systemMsg,
+        msg: res.yukon.data1.msg
       };
     }
   };

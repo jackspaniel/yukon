@@ -23,7 +23,7 @@ module.exports = function(app, config) {
       callApi(callArgs, req, res, next);
   }
 
-  // call live API - return data as res.locals[namespace] (namespace = data1, data2, data3 etc. for component level API calls)  
+  // call live API - return data as res.yukon[namespace] (namespace = data1, data2, data3 etc. for component level API calls)  
   function callApi(args, req, res, next) {
 
     debug('callApi called, namespace = ' + args.namespace);
@@ -51,8 +51,8 @@ module.exports = function(app, config) {
 
     call.end(function(err, response) {
       if (!err && response.body) { 
-        res.locals[callArgs.namespace] = response.body;
-        res.locals[callArgs.namespace].statusCode = response.statusCode;
+        res.yukon[callArgs.namespace] = response.body;
+        res.yukon[callArgs.namespace].statusCode = response.statusCode;
       }
       
       callArgs.apiError = err;
@@ -63,7 +63,7 @@ module.exports = function(app, config) {
     });
   }
 
-  // return stub data as res.locals[namespace] same as API
+  // return stub data as res.yukon[namespace] same as API
   function readStub(callArgs, req, res, next) {
     // MAGIC ALERT: framework assumes the stub name = nodule name if no stubPath is supplied
     var stubName = callArgs.stubPath || req.nodule.name; 
@@ -86,7 +86,7 @@ module.exports = function(app, config) {
 
     callArgs.apiResponse = {statusCode: 'STUB', req: {path: 'STUB: '+stubName}};
 
-    res.locals[callArgs.namespace] = JSON.parse(data);
+    res.yukon[callArgs.namespace] = JSON.parse(data);
     
     // IMPORTANT: this function must call next() and therefore must always be last in this block
     config.apiCallback(callArgs, req, res, next);
