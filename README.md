@@ -3,10 +3,32 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
-yukon is a component-based framework built on top of node/express - which processes 0-n REST APIs in parallel for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
+yukon is a component-based framework built on top of node/express - which makes 0-n asynchronous REST API calls in parallel to provide back-end data for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
 
-"nodules" are self-discovering, self-initializing web components, which propagate throughout the express middleware chain as __req.nodule__. Nodulejs was split off from yukon to separate out the core self-discovery and initialization features. These potentially could be used as a building block for a wide variety of frameworks.
+A really simple yukon component looks like this:
+```js
+module.exports = function(app) {
+  return {
+  
+    route: '/home', 
+    
+    templateName: 'homePage.jade',
 
+    apiCalls: [
+      {path: '/api/cms/home'},
+      {path: '/api/data/homedata'}
+    ],
+    
+    preProcessor: function(req, res) {
+      // pre-API(s) business logic goes here
+    },
+    
+    postProcessor: function(req, res) {
+      // post-API(s) business logic goes here
+    }
+  };
+};
+```
 ## Installation
 ```
 $ npm install yukon
@@ -17,12 +39,14 @@ $ npm install yukon
 require('yukon')(app, config); 
 ```
 + __app__ = express instance.
-+ __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below more details on config options.
++ __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below for more details. 
 
 ## What is a yukon nodule? 
-A __nodule__ is a self-discovering, self-initializing component that would be  to a JSP or PHP page in those worlds. A __yukon nodule__ extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
+A *__nodule__* is a self-discovering, self-registering web component tied to one or more express routes. With each incoming request, a nodule instance propagates throughout the express middleware chain as req.nodule. A *__yukon nodule__* extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. 
 
-Unlike the PHP/JSP worlds however, a nodule's route is declared and not tied by default to the filename or folder structure. So you are free to re-organize nodules without upsetting urls. But more importantly, because nodules are self-discovering, there are no onerous config files to maintain (IE - Spring). This system allows a much more scalable architecture on large sites--as there are no config or other shared files which grow to enormous sizes as the site grows, and nodules can be re-organized with zero impact.
+*Nodulejs was split off from yukon to separate out the core self-discovery and initialization features, which can potentially be a building block for a wide variety of node applications or frameworks.*
+
+A nodule is analogous to a JSP or PHP page in those worlds. Unlike PHP/JSP behavior however, a nodule's route is declared and not tied by default to the filename or folder structure. So you are free to re-organize nodules without upsetting urls. More importantly, because nodules are self-discovering, there are no onerous config files to maintain (IE - Spring). This system allows a much more scalable architecture on large sites--as there are no config or other shared files which grow to enormous sizes as the site grows, and nodules can be re-organized with zero impact.
 
 ## Motivation 
 From a __feature-development point of view__, we wanted to give developers the flexibility of [component-based architecture](http://en.wikipedia.org/wiki/Component-based_software_engineering) as much as possible, but still keep system-wide control over the middleware chain. On a small site with a small development team the latter might not be an issue. But on a large site with devs scattered all over the globe, some kind of middleware sandbox was a necessity. 
