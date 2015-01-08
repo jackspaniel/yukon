@@ -9,7 +9,7 @@
 // pre and post API business logic
 // creating res.yukon.renderData object which goes to template as base object
 // global API call is added by app (res.yukon.renderDataglobalNav)
-// preApi and postApi middlware functions (res.yukon.renderDataglobalNav.deviceType)
+// preData and postData middlware functions (res.yukon.renderDataglobalNav.deviceType)
 
 // for more demonstration of yukon features - see kitchenSink.js, getSpecificData.js, getData.js, 404.js, submitForm.js
 

@@ -1,4 +1,4 @@
-// calls all APIs in parallel (inlcuding those added by the app-level appPreApi middleware)
+// calls all APIs in parallel (inlcuding those added by the app-level preData middleware)
 
 module.exports = function(app, config) {
   var debug = config.customDebug('yukon->doApi');

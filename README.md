@@ -91,7 +91,7 @@ Yukon also adds the following optional nodule properties:
 5. __postProcessor__: use this function to process data returned from the API before calling template or sending back to client as JSON
 6. __error:__ set to a string or an Error() instance to get the framework to call next(error)
 7. __apiCalls:__ array of API calls to made in parallel for this nodule, see the section below for details what constitutes an API call. 
-<br>NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the appPreApi middleware.
+<br>NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the preData middleware.
 
 ### API-specific properties (config.apiDefaults)
 
@@ -113,10 +113,10 @@ Yukon defines the following properties for each API call. It is important to und
 
 An app can create and use 4 optional express middleware functions, which splice in between the built-in yukon middleware (see [yukon.js](https://github.com/jackspaniel/yukon/blob/master/yukon.js) for more detail):
 
-1. __appStart:__ called at start of middleware, before nodule.preProcessor
-2. __appPreApi:__ called after nodule.preProcessor, before API call(s)
-3. __appPostApi:__ called after API call(s), before nodule.postProcessor
-4. __appFinish:__ called after nodule.postProcessor, before res.send() or res.
+1. __start:__ called at start of middleware, before nodule.preProcessor
+2. __preData:__ called after nodule.preProcessor, before API call(s)
+3. __postData:__ called after API call(s), before nodule.postProcessor
+4. __finish:__ called after nodule.postProcessor, before res.send() or res.
 
 An app can also create 2 global functions, which are executed before and after every API call. It's important to understand that there can be several API calls per express request. So these functions are not in the standard middleware chain, although the api callback does make use of the middleware paradigm.
 

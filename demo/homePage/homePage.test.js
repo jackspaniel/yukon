@@ -4,7 +4,7 @@
 // nodule pre-API business logic function (changing template in preProcessor)
 // nodule post-API business logic function (changing client msg in postProcessor)
 // doApi middleware function - global API call should be added by app (res.yukon.renderDataglobalNav)
-// preApi and postApi middlware functions - res.yukon.renderDataglobalNav.deviceType should be added
+// preData and postData middlware functions - res.yukon.renderDataglobalNav.deviceType should be added
 
 var expect  = require('expect');
 var request = require('supertest');
