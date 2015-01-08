@@ -8,7 +8,8 @@ module.exports = function(app, appConfig) {
   var mergedConfig = _.merge(config, appConfig || {});
   
   // initializing these here because they need a reference to app
-  mergedConfig.appPreApi = demoPreApi(app);
+  mergedConfig.middlewares.preData = demoPreApi(app);
+  
   mergedConfig.apiCallBefore = demoApiCallBefore(app);
 
   yukon(app, mergedConfig); 
@@ -39,18 +40,19 @@ var config =  {
   /// CUSTOM MIDDLEWARE SPLICED IN-BETWEEN YUKON MIDDLEWARE ///
   /////////////////////////////////////////////////////////////  
 
-  // middleware nvoked before yukon preApi, which calls nodule.preProcessor
-  appStart: demoStart,
+  middlewares: {
+    // middleware nvoked before yukon preData, which calls nodule.preProcessor
+    start: demoStart,
    
-  // middleware invoked before yukon doApi, which makes all API calls in parallel and waits for all of them to return
-  appPreApi: null, // set in init since it needs app
-  
-  // middleware invoked before yukon postApi, which calls nodule.postProcessor
-  appPostApi: demoPostApi,
-  
-  // middleware invoked before yukon finish, which renders template or sends JSON
-  appFinish: demoFinish,
-
+    // middleware invoked before yukon doApi, which makes all API calls in parallel and waits for all of them to return
+    preData: null, // set in init since it needs app
+    
+    // middleware invoked before yukon postData, which calls nodule.postProcessor
+    postData: demoPostApi,
+    
+    // middleware invoked before yukon finish, which renders template or sends JSON
+    finish: demoFinish,
+  },
 
   /////////////////////////////////////////////////// 
   /// FUNCTIONS INVOKED PRE AND POST API BY YUKON ///

@@ -12,19 +12,26 @@ module.exports = function(app, config) {
   // array of middleware functions to be executed on each request
   // splicing app-defined middleware in-between yukon system middlware
   yukonConfig.noduleDefaults.middlewares = [
-    config.appStart,
+    
+    config.middlewares.start, // app-defined
+    
     require('./middlewares/preProcessor')(app, yukonConfig), // preprocessing logic before APIs are called
 
-    config.appPreApi,
-    require('./middlewares/doApi')(app, yukonConfig), // handles all API calls in parallel
+    config.middlewares.preData, // app-defined
+    
+    // user can specify a different kind of data gathering
+    // TODO: use doApi by default until that is split off into a plugin
+    config.middlewares.getData || require('./middlewares/doApi')(app, yukonConfig), 
+    
+    config.middlewares.postData, // app-defined
 
-    config.appPostApi,
     require('./middlewares/postProcessor')(app, yukonConfig), // common post-processing logic after all APIs return
 
-    config.appFinish,
+    config.middlewares.finish, // app-defined
+    
     require('./middlewares/finish')(app, yukonConfig), // finish with json or html
   ];
-  
+
   // nodulejs finds and loads nodules based on config below, registers routes with express based on nodule route and other properties
   nodulejs(app, yukonConfig); 
 };
@@ -37,19 +44,23 @@ var defaultConfig =  {
   ///////////////////////////////////////////////////////////////// 
   /// APP-DEFINED EXPRESS MIDDLEWARE FUNCTIONS INVOKED BY YUKON ///
   /////////////////////////////////////////////////////////////////  
+  middlewares: {
+    // called before nodule.preProcessor
+    start:  passThrough,
+ 
+    // called after nodule.preProcessor, before API call(s)
+    preData: passThrough,
 
-  // called before nodule.preProcessor
-  appStart:  passThrough,
+    // middleware that gets all data (default = doApi, but can be replaced with app-defined data gathering)
+    // TODO: split this off as a plugin for calling apis in parallel
+    getData: null,
  
-  // called after nodule.preProcessor, before API call(s)
-  appPreApi: passThrough,
+    // called after API call(s), before nodule.postProcessor
+    postData: passThrough,
  
-  // called after API call(s), before nodule.postProcessor
-  appPostApi: passThrough,
- 
-  // called after nodule.postProcessor, before res.send or res.render
-  appFinish: passThrough,
-
+    // called after nodule.postProcessor, before res.send or res.render
+    finish: passThrough,
+  },
 
   /////////////////////////////////////////////////// 
   /// FUNCTIONS INVOKED PRE AND POST API BY YUKON ///
@@ -104,7 +115,7 @@ var defaultConfig =  {
     error: null,
 
     // array of apiCalls to call in parallel
-    // NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the appPreApi middleware
+    // NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the preData middleware
     apiCalls: [],
   },
 
