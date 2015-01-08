@@ -138,13 +138,14 @@ $ npm install
 $ make test 
 ```
 ## To Do
-1. Reconsider stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
-2. Get demoApp working as standalone.
-3. Write more detailed unit tests?
-4. Hook up Travis CI and code coverage.
+1. Split off doApi into a plugin so other forms of data gathering middleware can be used.
+2. Reconsider stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
+3. Get demoApp working as standalone.
+4. Write more detailed unit tests?
+5. Hook up Travis CI and code coverage.
 
 ## Features for future consideration
-+ __Other forms of async data gathering.__ Currently yukon only knows how to make REST API calls. But it woudn't take much work to extend this behavior to any sort of asynchronous data store - such as a Mongo DB or Redis cache.
++ __Other forms of async data gathering.__ See To Do #1. Currently yukon only knows how to make REST API calls. But it woudn't take much work to extend this behavior to any sort of asynchronous data store - such as a Mongo DB or Redis cache.
 + __Sequential API calls.__ Currently yukon makes all API calls in parallel. We've been fortunate in that we haven't needed dependent API calls yet.
 + __API error handling.__ It seems that there can be a huge variation in error behavior, and even in what constitutes an API error (status code-based?), from web-app to web-app. So for now I've punted on advanced API error handling, and let the app deal with it in the API callback. But if something like a standard is more or less agreed-upon, I will be happy to add flexible error handling.
 
