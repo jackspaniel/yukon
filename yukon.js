@@ -20,7 +20,7 @@ module.exports = function(app, config) {
     config.middlewares.preData, // app-defined
     
     // user can specify a different kind of data gathering
-    // TODO use doApi by default until that is split off into a plugin
+    // TODO: use doApi by default until that is split off into a plugin
     config.middlewares.getData || require('./middlewares/doApi')(app, yukonConfig), 
     
     config.middlewares.postData, // app-defined
@@ -32,8 +32,6 @@ module.exports = function(app, config) {
     require('./middlewares/finish')(app, yukonConfig), // finish with json or html
   ];
 
-  console.log(yukonConfig.noduleDefaults.middlewares);
-  
   // nodulejs finds and loads nodules based on config below, registers routes with express based on nodule route and other properties
   nodulejs(app, yukonConfig); 
 };
