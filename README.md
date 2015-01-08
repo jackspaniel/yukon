@@ -5,6 +5,8 @@
 
 yukon is a component-based framework built on top of node/express - which makes 0-n asynchronous REST API calls in parallel to provide back-end data for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
 
+Note: The API behavior of yukon can be overriden by specifying your own config.middlewares.getData function. See Config section below for more details.
+
 __TODO: I'm working on making yukon data source agnostic and splitting off the API stuff into a plugin. In that way yukon can support any type or amount of eithr plugin or one-off data-gathering middleware. ETA: Jan 13th, 2015__
 
 A really simple yukon component looks like this:
