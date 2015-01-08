@@ -115,8 +115,9 @@ An app can create and use 4 optional express middleware functions, which splice 
 
 1. __start:__ called at start of middleware, before nodule.preProcessor
 2. __preData:__ called after nodule.preProcessor, before API call(s)
-3. __postData:__ called after API call(s), before nodule.postProcessor
-4. __finish:__ called after nodule.postProcessor, before res.send() or res.
+3. __getData:__ middleware which gets all data (currently yukon uses doParallelApi by default, plan is to split that off into a plugin)
+4. __postData:__ called after API call(s), before nodule.postProcessor
+5. __finish:__ called after nodule.postProcessor, before res.send() or res.render()
 
 An app can also create 2 global functions, which are executed before and after every API call. It's important to understand that there can be several API calls per express request. So these functions are not in the standard middleware chain, although the api callback does make use of the middleware paradigm.
 
@@ -127,9 +128,9 @@ An app can also create 2 global functions, which are executed before and after e
 
 There are also 3 global config properties inherited from [nodulejs](https://github.com/jackspaniel/nodulejs):
 
-1. __dirs__: <span color="grey">(OPTIONAL, default='/nodules')</span> *path(s) to look for your nodules, exclude property can be full or partal match* <br>__example:__ [{ path: '/app', exclude: ['demoApp.js', '.test.js', '/shared/'] }, { path: '/lib/nodules', exclude: ['.test.js'] }]
-2. __debugToConsole__: <span style="color:grey">(OPTIONAL, default=false)</span> *set to true to see nodulejs debug output in the console* 
-3. __customDebug__: <span style="color:grey">(OPTIONAL)</span> *custom debug function* <br>__example:__ function(identifier) { return function(msg){... your debug function here ...} }
+1. __dirs__: <span color="grey">(OPTIONAL, default='/nodules')</span> path(s) to look for your nodules, exclude property can be full or partal match *<br>__example:__ [{ path: '/app', exclude: ['demoApp.js', '.test.js', '/shared/'] }, { path: '/lib/nodules', exclude: ['.test.js'] }]*
+2. __debugToConsole__: <span style="color:grey">(OPTIONAL, default=false)</span> set to true to see nodulejs debug output in the console
+3. __customDebug__: <span style="color:grey">(OPTIONAL)</span> custom debug function *<br>__example:__ function(identifier) { return function(msg){... your debug function here ...} }*
 
 ### To Run Node Tests
 ```
@@ -138,13 +139,14 @@ $ npm install
 $ make test 
 ```
 ## To Do
-1. Reconsider stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
-2. Get demoApp working as standalone.
-3. Write more detailed unit tests?
-4. Hook up Travis CI and code coverage.
+1. Split off doApi into a plugin so other forms of data gathering middleware can be used.
+2. Reconsider stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
+3. Get demoApp working as standalone.
+4. Write more detailed unit tests?
+5. Hook up Travis CI and code coverage.
 
 ## Features for future consideration
-+ __Other forms of async data gathering.__ Currently yukon only knows how to make REST API calls. But it woudn't take much work to extend this behavior to any sort of asynchronous data store - such as a Mongo DB or Redis cache.
++ __Other forms of async data gathering.__ See To Do #1. Currently yukon only knows how to make REST API calls. But it woudn't take much work to extend this behavior to any sort of asynchronous data store - such as a Mongo DB or Redis cache.
 + __Sequential API calls.__ Currently yukon makes all API calls in parallel. We've been fortunate in that we haven't needed dependent API calls yet.
 + __API error handling.__ It seems that there can be a huge variation in error behavior, and even in what constitutes an API error (status code-based?), from web-app to web-app. So for now I've punted on advanced API error handling, and let the app deal with it in the API callback. But if something like a standard is more or less agreed-upon, I will be happy to add flexible error handling.
 
