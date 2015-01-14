@@ -10,7 +10,7 @@ describe('demoApp/yukon API framework test suite', function(){
 
   var app = express();
   app.use(bodyParser.json());
-  demoApp(app, {debugToConsole: false});
+  demoApp(app, {debugToConsole: false}); // set true to debug
 
   // find and execute individual nodule test files
   glob.sync('./**/*.test.js', { cwd: 'demo' })
