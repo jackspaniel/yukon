@@ -9,6 +9,8 @@ Note: The API behavior of yukon can be overriden by specifying your own config.m
 
 __TODO: I'm working on making yukon data source agnostic and splitting off the API stuff into a plugin. In that way yukon can support any type or amount of eithr plugin or one-off data-gathering middleware. ETA: Jan 13th, 2015__
 
+__UPDATE: data gathering via plugins have been implemented. mysql and solr are still a WIP in progress though. Some of the stuff below is out of date__
+
 A really simple yukon component looks like this:
 ```js
 module.exports = function(app) {
