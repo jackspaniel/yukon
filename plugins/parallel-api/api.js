@@ -7,7 +7,7 @@ var fs = require('fs');
 var _ = require('lodash');
 
 module.exports = function(app, config) {
-  var debug = config.customDebug('yukon->api');
+  var debug = config.customDebug('yukon->parallel-api->api');
 
   return { 
     getData: getData,
