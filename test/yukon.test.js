@@ -6,7 +6,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var demoApp = require('../demo/demoApp');
 
-describe('demoApp/yukon API framework test suite', function(){
+describe('demoApp/yukon component framework test suite', function(){
 
   var app = express();
   app.use(bodyParser.json());

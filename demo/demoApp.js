@@ -5,7 +5,9 @@ var yukon = require('..');
 var debug;
 
 module.exports = function(app, appConfig) {  
-  var mergedConfig = _.merge(config, appConfig || {});
+  appConfig = appConfig || {};
+
+  var mergedConfig = _.merge(config, appConfig);
   
   // initializing these here because they need a reference to app
   mergedConfig.middlewares.preData = demoPreApi(app);
@@ -16,9 +18,8 @@ module.exports = function(app, appConfig) {
 
   app.use(handleErrors);
 
-  debug = (appConfig.customDebug) 
-          ? appConfig.customDebug('yukon->demoApp')
-          : function(msg) { if (mergedConfig.debugToConsole) console.log('yukon->demoApp: ' + msg); };
+  debug = (appConfig.customDebug) ? appConfig.customDebug('yukon->demoApp')
+                                  : function(msg) { if (mergedConfig.debugToConsole) console.log('yukon->demoApp: ' + msg); };
 };
 
 // since we're not sure where this demo app is being invoked

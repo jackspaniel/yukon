@@ -146,10 +146,13 @@ Download yukon - https://github.com/jackspaniel/yukon/archive/master.zip
 $ npm install
 $ make test 
 ```
+### To Run Demo App as Standalone
+```
+$ node demoServer
+```
 ## To Do
 1. Reconsider stub behavior for parallel-api. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
-2. Get demoApp working as standalone.
-3. Hook up Travis CI and code coverage.
+2. Hook up Travis CI and code coverage.
 
 ## Features for future consideration
 + __Flesh out more plugins.__ Currently only the paralle-api plugin is fully operational. I need real-world sites to test this out on. (Free consulting!)

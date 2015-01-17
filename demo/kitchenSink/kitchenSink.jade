@@ -6,3 +6,8 @@ html
     h3 res.yukon.data3 = !{JSON.stringify(data3)}    
     h3 res.yukon.data4 = !{JSON.stringify(data4)}    
     h3 res.yukon.data5 = !{JSON.stringify(data5)}    
+    h1 test form submit
+      form(action='/json/submitForm', method='post')
+        input(type='hidden', name='param1', value='test1')
+        input(type='hidden', name='param2', value='test2')
+        button(type='submit') Submit Form    
