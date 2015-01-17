@@ -337,5 +337,5 @@ For more examples see the [Kitchen Sink](https://github.com/jackspaniel/yukon/bl
 [downloads-url]: https://npmjs.org/package/yukon
 [travis-image]: https://travis-ci.org/jackspaniel/yukon.svg
 [travis-url]: https://travis-ci.org/jackspaniel/yukon?branch=master
-[coveralls-image]: https://coveralls.io/repos/jackspaniel/yukon/badge.svg
+[coveralls-image]: https://coveralls.io/repos/jackspaniel/yukon/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/r/jackspaniel/yukon?branch=master
