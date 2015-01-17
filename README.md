@@ -3,7 +3,6 @@
 # yukon component framework
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jackspaniel/yukon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![build status][travis-image]][travis-url]
