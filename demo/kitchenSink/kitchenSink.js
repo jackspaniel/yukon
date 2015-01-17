@@ -24,7 +24,7 @@
 module.exports = function(app) {
   return {
     // routes can be a string, RegExp or array of either (to match multiple routes)
-    route: ['/kitchensink', '/bathroomtub/:id'], // set :id = "specialsink" to test
+    route: ['/kitchensink', '/bathroomtub/:id'],
 
     apiCalls: [
       {path: '/api/cms/home'}, // comes to postProcessor as res.yukon.data1

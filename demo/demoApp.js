@@ -2,12 +2,17 @@
 
 var _ = require('lodash');
 var yukon = require('..');
+var express = require('express');
+var bodyParser = require('body-parser');
+
 var debug;
 
 module.exports = function(app, appConfig) {  
+  app = app || express();
+  app.use(bodyParser.json());
   appConfig = appConfig || {};
 
-  var mergedConfig = _.merge(config, appConfig);
+  var mergedConfig = _.merge(_.cloneDeep(config), appConfig);
   
   // initializing these here because they need a reference to app
   mergedConfig.middlewares.preData = demoPreApi(app);
@@ -20,6 +25,8 @@ module.exports = function(app, appConfig) {
 
   debug = (appConfig.customDebug) ? appConfig.customDebug('yukon->demoApp')
                                   : function(msg) { if (mergedConfig.debugToConsole) console.log('yukon->demoApp: ' + msg); };
+
+  return app;
 };
 
 // since we're not sure where this demo app is being invoked
@@ -30,11 +37,11 @@ var config =  {
 
   // path(s) to look for your nodules 
   dirs: [
-    { path: myDir, exclude: ['demoApp.js', '.test.js'] }, // exclude can be full or partal match
+    { path: myDir, exclude: ['emoApp.js', '.test.js'] }, // exclude both demo apps, can be full or partal match
   ],
 
   // set to true or or use customDebug: function(identifier) { return function(msg){... your debug function here ...} }
-  debugToConsole: true, 
+  debugToConsole: false, 
 
 
   /////////////////////////////////////////////////////////////  

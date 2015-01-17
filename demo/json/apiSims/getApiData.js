@@ -12,8 +12,6 @@ module.exports = function(app) {
           msg: 'get data success! id='+req.params.id,
           queryPrams: req.query
         };
-
-        if (req.params.id === 'specialsink') returnObj.specialsink = "success";
         
         res.send(returnObj);
       }
