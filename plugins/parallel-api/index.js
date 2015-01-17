@@ -10,7 +10,7 @@ module.exports = function(app, config) {
   // merge app config over plugin config
   // since plugin is a peer to yukon - the merge order with yukon doesn't matter
   // but any properties set in the app config should always override both
-  var mergedConfig = _.merge(defaultConfig, config);
+  var mergedConfig = _.merge(_.cloneDeep(defaultConfig), config);
 
   var middleware = require('./parallelApi')(app, mergedConfig);
 

@@ -4,7 +4,9 @@ var _ = require('lodash');
 var nodulejs = require('nodulejs');
 
 module.exports = function(app, config) {
-  var yukonConfig = _.merge(defaultConfig, config);
+
+  var yukonConfig = _.merge(_.cloneDeep(defaultConfig), config);
+  yukonConfig.customDebug = yukonConfig.customDebug || customDebug;
 
   var debug = yukonConfig.customDebug('yukon->index');
   debug('initializing');
@@ -20,19 +22,19 @@ module.exports = function(app, config) {
   // splicing app-defined middleware in-between yukon system middlware
   yukonConfig.noduleDefaults.middlewares = [
     
-    config.middlewares.start, // app-defined
+    yukonConfig.middlewares.start, // app-defined
     
     require('./middlewares/preProcessor')(app, yukonConfig), // preprocessing logic before APIs are called
 
-    config.middlewares.preData, // app-defined
+    yukonConfig.middlewares.preData, // app-defined
     
     getDataMiddleware, // can be app-defined or use yukon parallel plugin caller by default
     
-    config.middlewares.postData, // app-defined
+    yukonConfig.middlewares.postData, // app-defined
 
     require('./middlewares/postProcessor')(app, yukonConfig), // common post-processing logic after all APIs return
 
-    config.middlewares.finish, // app-defined
+    yukonConfig.middlewares.finish, // app-defined
     
     require('./middlewares/finish')(app, yukonConfig), // finish with json or html
   ];
@@ -49,9 +51,17 @@ module.exports = function(app, config) {
     yukonConfig = plugin.mergedConfig;
     yukonConfig.pluginMiddlewares.push(plugin.middleware);
   }
+
+  // default debug function
+  function customDebug(identifier) {   
+    return function(msg) {
+      if (yukonConfig.debugToConsole) console.log(identifier+': '+msg);
+    };
+  }
 };
 
 function passThrough(req, res, next) {
+  req.nodule.debug('passThrough middleware');
   next();
 }
 
@@ -78,13 +88,6 @@ var defaultConfig =  {
  
     // called after nodule.postProcessor, before res.send or res.render
     finish: passThrough,
-  },
-
-  // default debug function
-  customDebug: function(identifier) {   
-    return function(msg) {
-      if (defaultConfig.debugToConsole) console.log(identifier+': '+msg);
-    };
   },
 
   noduleDefaults: {
