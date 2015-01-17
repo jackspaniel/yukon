@@ -3,11 +3,9 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
-![North to the Yukon!](https://farm9.staticflickr.com/8328/8370029309_20cebc20d3.jpg)
-
-![North to the Yukon!](https://farm9.staticflickr.com/8328/8370029309_20cebc20d3_c.jpg)
-
 yukon is a component-based, datasource-agnostic framework for serving web content. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs) - to include back-end data gathering, standardized slots for app-defined middleware and template management. 
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![North to the Yukon!](https://farm9.staticflickr.com/8328/8370029309_20cebc20d3.jpg)
 
 Back-end data-gathering is achieved through plugins. Currently the only fully-fleshed out plugin makes 0-n REST API calls in parallel - as that was our need. I have made some starts on mysql and solr plugins, but would like a real - world implementation to battle-test them on. So by all means if you stumble across this repository, shoot me an email and I will work with you to get it up and running for your needs. 
 
