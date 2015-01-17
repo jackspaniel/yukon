@@ -1,6 +1,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![North to the Yukon!](http://i.imgur.com/gBj7RWo.gif)
 
-# yukon API framework
+# yukon component framework
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
@@ -50,7 +50,7 @@ require('yukon')(app, config);
 ## What is a yukon nodule? 
 A *__nodule__* is a self-discovering, self-registering web component tied to one or more express routes. With each incoming request, a nodule instance propagates throughout the express middleware chain as req.nodule. 
 
-A *__yukon nodule__* extends the base nodule behavior to include REST API data gathering, stub-handling and template-rendering. Yukon attaches data returned from the API(s) as the res.yukon object, and sends res.yukon.renderData to the template or straight back to the client as JSON.
+A *__yukon nodule__* extends the base nodule behavior to include data gathering, stub-handling and template-rendering. It also allows custom app-defined middleware to be declared between each step of the request/response chain. Yukon attaches data returned as the res.yukon object, and sends res.yukon.renderData to the template or straight back to the client as JSON.
 
 *Nodulejs was split off from yukon to separate out the core self-discovery and initialization features, which can potentially be a building block for a wide variety of node applications or frameworks.*
 
@@ -74,7 +74,7 @@ This diagram might make the concept a little more clear:
 Yukon config is broken into 3 sections:
 
 1. Nodule-specific properties
-2. API-specific properties
+2. Data plugin-specific properties
 3. App-defined middleware functions and global settings
 
 *Note: You may occasionally see "MAGIC ALERT" below. This is for the handful of times where the framework does some convenience method that isn't immediately obvious, but comes up so much we felt the code saving was worth the loss in conceptual clarity.*
@@ -93,15 +93,17 @@ Yukon also adds the following optional nodule properties:
 1. __templateName:__ MAGIC ALERT: if null the framework looks for a template in the same folder and of the same name as the nodule filename + templateExt. So if you have myPage.jade in the same folder as myPage.js, there is no need to specify template name.
 2. __templateExt:__ default template extension
 3. __contentType:__ 'html' and 'json' are the only current values
-4. __preProcessor:__ use this function to manipulate query params or other business logic before api call
-5. __postProcessor__: use this function to process data returned from the API before calling template or sending back to client as JSON
+4. __preProcessor:__ use this function to manipulate query params or other business logic before back-end data-gathering
+5. __postProcessor__: use this function to process data returned from back-end data-gathering, before calling template or sending back to client as JSON
 6. __error:__ set to a string or an Error() instance to get the framework to call next(error)
+
+*this property is added to nodule defaults by the parallel-api plugin*
 7. __apiCalls:__ array of API calls to made in parallel for this nodule, see the section below for details what constitutes an API call. 
 <br>NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the preData middleware.
 
-### API-specific properties (config.apiDefaults)
+### API-specific properties added by the parallel-api plugin (plugins/parallel-api/index.js - config.apiDefaults)
 
-Yukon defines the following properties for each API call. It is important to understand that these exist in a one-to-many relationship with nodules. 
+The yukon parallel-api plugin defines the following properties for each API call. It is important to understand that these exist in a one-to-many relationship with nodules. 
 
 1. __path:__ path to API (not including server). 
 <br>MAGIC ALERT: if the API path ends with a slash(/), the framework automatically tries to append req.params.id from the express :id wildcard. For us at least this is a very common REST paradigm.
@@ -115,20 +117,20 @@ Yukon defines the following properties for each API call. It is important to und
 9. __stubPath:__ can contain path or just name if in same folder
 <br>MAGIC ALERT: if not specified, app looks for [nodule name].stub.json in nodule folder
 
+The parallel-api plugin also allows 2 optional app-defined functions, which are executed before and after every API call. It's important to understand that there can be several API calls per express request. So these functions are not in the standard middleware chain, although the api callback does make use of the middleware paradigm.
+
+1. __apiCallBefore:__ a synchronous function executed before of every api call. Do any common API pre-processing here. 
+2. __apiCallback:__ an asynchronous function executed after every api call, must execute next() if defined. Do error handling and other common post-API processing here. To do: consider moving error handling to framework and making this call synchronous.
+
 ### App-defined middlware
 
 An app can create and use 4 optional express middleware functions, which splice in between the built-in yukon middleware (see [yukon.js](https://github.com/jackspaniel/yukon/blob/master/yukon.js) for more detail):
 
 1. __start:__ called at start of middleware, before nodule.preProcessor
-2. __preData:__ called after nodule.preProcessor, before API call(s)
-3. __getData:__ middleware which gets all data (currently yukon uses doParallelApi by default, plan is to split that off into a plugin)
-4. __postData:__ called after API call(s), before nodule.postProcessor
+2. __preData:__ called after nodule.preProcessor, before data-gathering
+3. __getData:__ middleware which gets all data (Note: if specified in the app config, this function will bypass all plugin behavior)
+4. __postData:__ called after data gathering, before nodule.postProcessor
 5. __finish:__ called after nodule.postProcessor, before res.send() or res.render()
-
-An app can also create 2 global functions, which are executed before and after every API call. It's important to understand that there can be several API calls per express request. So these functions are not in the standard middleware chain, although the api callback does make use of the middleware paradigm.
-
-1. __apiCallBefore:__ a synchronous function executed before of every api call. Do any common API pre-processing here. 
-2. __apiCallback:__ an asynchronous function executed after every api call, must execute next() if defined. Do error handling and other common post-API processing here. 
  
 ### Global properties
 
@@ -145,16 +147,13 @@ $ npm install
 $ make test 
 ```
 ## To Do
-1. Split off doApi into a plugin so other forms of data gathering middleware can be used.
-2. Reconsider stub behavior. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
-3. Get demoApp working as standalone.
-4. Write more detailed unit tests?
-5. Hook up Travis CI and code coverage.
+1. Reconsider stub behavior for parallel-api. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
+2. Get demoApp working as standalone.
+3. Hook up Travis CI and code coverage.
 
 ## Features for future consideration
-+ __Other forms of async data gathering.__ See To Do #1. Currently yukon only knows how to make REST API calls. But it woudn't take much work to extend this behavior to any sort of asynchronous data store - such as a Mongo DB or Redis cache.
-+ __Sequential API calls.__ Currently yukon makes all API calls in parallel. We've been fortunate in that we haven't needed dependent API calls yet.
-+ __API error handling.__ It seems that there can be a huge variation in error behavior, and even in what constitutes an API error (status code-based?), from web-app to web-app. So for now I've punted on advanced API error handling, and let the app deal with it in the API callback. But if something like a standard is more or less agreed-upon, I will be happy to add flexible error handling.
++ __Flesh out more plugins.__ Currently only the paralle-api plugin is fully operational. I need real-world sites to test this out on. (Free consulting!)
++ __API error handling for parallel-api plugin.__ It seems that there can be a huge variation in error behavior, and even in what constitutes an API error (status code-based?), from web-app to web-app. So for now I've punted on advanced API error handling, and let the app deal with it in the API callback. But if something like a standard is more or less agreed-upon, I will be happy to add flexible error handling.
 
 ## Examples:
 
