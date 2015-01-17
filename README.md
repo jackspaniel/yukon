@@ -4,6 +4,8 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
+[![build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
 
 yukon is a component-based, datasource-agnostic framework for serving web content. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs) - to include back-end data gathering, standardized slots for app-defined middleware and template management. 
 
@@ -332,3 +334,8 @@ For more examples see the [Kitchen Sink](https://github.com/jackspaniel/yukon/bl
 [npm-url]: https://www.npmjs.com/package/yukon
 [downloads-image]: https://img.shields.io/npm/dm/yukon.svg?style=flat
 [downloads-url]: https://npmjs.org/package/yukon
+[travis-image]: https://img.shields.io/travis/yukon/yukon/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/yukon/yukon
+[coveralls-image]: https://img.shields.io/coveralls/yukon/yukon/master.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/yukon/yukon?branch=master
+
