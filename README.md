@@ -3,15 +3,17 @@
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
-yukon is a component-based framework built on top of node/express - which makes 0-n asynchronous REST API calls in parallel to provide back-end data for each express request. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs). 
+![North to the Yukon!](https://farm9.staticflickr.com/8328/8370029309_20cebc20d3.jpg)
 
-Note: The API behavior of yukon can be overriden by specifying your own config.middlewares.getData function. See Config section below for more details.
+![North to the Yukon!](https://farm9.staticflickr.com/8328/8370029309_20cebc20d3_c.jpg)
 
-__TODO: I'm working on making yukon data source agnostic and splitting off the API stuff into a plugin. In that way yukon can support any type or amount of eithr plugin or one-off data-gathering middleware. ETA: Jan 13th, 2015__
+yukon is a component-based, datasource-agnostic framework for serving web content. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs) - to include back-end data gathering, standardized slots for app-defined middleware and template management. 
 
-__UPDATE: data gathering via plugins have been implemented. mysql and solr are still a WIP in progress though. Some of the stuff below is out of date__
+Back-end data-gathering is achieved through plugins. Currently the only fully-fleshed out plugin makes 0-n REST API calls in parallel - as that was our need. I have made some starts on mysql and solr plugins, but would like a real - world implementation to battle-test them on. So by all means if you stumble across this repository, shoot me an email and I will work with you to get it up and running for your needs. 
 
-A really simple yukon component looks like this:
+Data-gathering plugins can also be bypassed entirely by specifying a custom config.middlewares.getData function. See Config section below for more details.
+
+A really simple yukon component (using the parallel-api plugin) looks like this:
 ```js
 module.exports = function(app) {
   return {
