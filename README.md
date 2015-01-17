@@ -1,4 +1,4 @@
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![North to the Yukon!](https://farm9.staticflickr.com/8328/8370029309_20cebc20d3.jpg)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Aurora Dancing](https://farm9.staticflickr.com/8468/8370033017_573b380e53.jpg)
 
 # yukon API framework
 
