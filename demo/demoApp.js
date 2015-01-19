@@ -12,7 +12,7 @@ module.exports = function(app, appConfig) {
   app.use(bodyParser.json());
   appConfig = appConfig || {};
 
-  var mergedConfig = _.merge(_.cloneDeep(config), appConfig);
+  var mergedConfig = _.merge({}, config, appConfig);
   
   // initializing these here because they need a reference to app
   mergedConfig.middlewares.preData = demoPreApi(app);

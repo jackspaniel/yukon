@@ -8,7 +8,7 @@ var express = require('express');
 module.exports = function(app, appConfig) {  
   app = app || express();
 
-  var mergedConfig = _.merge(_.cloneDeep(config), appConfig);
+  var mergedConfig = _.merge({}, config, appConfig);
   
   yukon(app, mergedConfig); 
 

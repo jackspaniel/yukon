@@ -5,7 +5,7 @@ var nodulejs = require('nodulejs');
 
 module.exports = function(app, config) {
 
-  var yukonConfig = _.merge(_.cloneDeep(defaultConfig), config);
+  var yukonConfig = _.merge({}, defaultConfig, config);
   yukonConfig.customDebug = yukonConfig.customDebug || customDebug;
 
   var debug = yukonConfig.customDebug('yukon->index');

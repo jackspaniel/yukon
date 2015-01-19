@@ -24,7 +24,7 @@ module.exports = function (app, config) {
     //     activityId: req.authData.activityId,
     //     clientId: req.authData.clientId
     //   };
-    //   query = _.merge(objectDefaults, req.nodule.solrQuery);
+    //   query = _.merge({}, objectDefaults, req.nodule.solrQuery);
     // } else if (_.isString(req.nodule.solrQuery)) {
     //   query = 'activityId:'+req.authData.activityId+
     //                ' AND clientId:'+req.authData.clientId+ 

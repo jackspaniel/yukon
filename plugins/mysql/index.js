@@ -9,7 +9,7 @@ var _ = require('lodash');
 module.exports = function(app, config) {
   var debug = config.customDebug('yukon->mysql->index');
 
-  var middleware = require('./doQuery')(app, _.merge(_.cloneDeep(defaultConfig), config));
+  var middleware = require('./doQuery')(app, _.merge({}, defaultConfig, config));
 
   return {
     middleware: middleware,
