@@ -155,7 +155,6 @@ $ node demoServer
 ```
 ## To Do
 1. Reconsider stub behavior for parallel-api. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
-2. Hook up Travis CI and code coverage.
 
 ## Features for future consideration
 + __Flesh out more plugins.__ Currently only the paralle-api plugin is fully operational. I need real-world sites to test this out on. (Free consulting!)
