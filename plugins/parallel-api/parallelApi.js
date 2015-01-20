@@ -26,18 +26,15 @@ module.exports = function(app, config) {
   function parallelApis(apiCalls, req, res, next) {
     debug('parallelApis started!! # calls:' + apiCalls.length);
 
-    var results = 0;
-    var errorReceived = null;
+    var results = 1;
     apiCalls.forEach(function(apiCall){
       api.getData(apiCall, req, res, function(err){
-        if (err && !errorReceived) { 
-          errorReceived = err; 
+        if (err) { 
           next(err); // if any error - send full request into error flow, exit out of parallelApi calls
           return;
         }
 
-        results++;
-        if (!errorReceived && results === apiCalls.length) {
+        if (results++ === apiCalls.length) {
           debug('parallelApis done!!');
           next(); // if all calls return successfully call the express next()
         }

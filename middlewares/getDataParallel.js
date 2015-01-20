@@ -12,18 +12,15 @@ module.exports = function(config) {
   function parallelMiddlewares(middlewares, req, res, next) {
     debug('parallelMiddlewares started!! # of middlewares: ' + middlewares.length);
 
-    var results = 0;
-    var errorReceived = null;
+    var results = 1;
     middlewares.forEach(function(middleware) {
       middleware(req, res, function(err) {
-        if (err && !errorReceived) { 
-          errorReceived = err; 
+        if (err) { 
           next(err); // if any error - send full request into error flow, exit out of parallel data calls
           return;
         }
 
-        results++;
-        if (!errorReceived && results === middlewares.length) {
+        if (results++ === middlewares.length) {
           debug('parallelMiddlewares done!!');
           next(); // when all calls return, call the express middleware next()
         }
