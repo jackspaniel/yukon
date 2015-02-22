@@ -10,10 +10,6 @@
 
 yukon is a component-based, datasource-agnostic framework for serving web content. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs) - to include back-end data gathering, standardized slots for app-defined middleware and template management. 
 
-Back-end data-gathering is achieved through plugins. Currently the only fully-fleshed out plugin makes 0-n REST API calls in parallel - as that was our need. I have made some starts on mysql and solr plugins, but would like a real - world implementation to battle-test them on. So by all means if you stumble across this repository, shoot me an email and I will work with you to get it up and running for your needs. 
-
-Data-gathering plugins can also be bypassed entirely by specifying a custom config.middlewares.getData function. See Config section below for more details.
-
 A really simple yukon component (using the parallel-api plugin) looks like this:
 ```js
 module.exports = function(app) {
@@ -38,6 +34,13 @@ module.exports = function(app) {
   };
 };
 ```
+Just save this as a .js file in the default nodules directory, or more likely - in a directory you specify. The framework will do the rest when node boots. 
+
+Back-end data-gathering is achieved through plugins. Currently the only fully-fleshed out plugin makes 0-n REST API calls in parallel - as that was our need. I have made some starts on mysql and solr plugins, but would like a real - world implementation to battle-test them on. So by all means if you stumble across this repository, shoot me an email and I will work with you to get it up and running for your needs. 
+
+*FYI - we're considering an alternate approach to non-REST data sources. See To Do section below.*
+
+
 ## Installation
 ```
 $ npm install yukon
@@ -50,7 +53,12 @@ require('yukon')(app, config);
 + __app__ = express instance.
 + __config__ = any custom properties you want to add or defaults you want to override. See the [demoApp](https://github.com/jackspaniel/yukon/blob/master/demo/demoApp.js) for an example of a working yukon app. See the Config section below for more details. 
 
-## What is a yukon nodule? 
+
+## Further Reading
+### Brand new to node?
+If so then some of the terms that follow may be unfamilar. The good news is that the yukon framework is designed to handle a lot of the low level node "plumbing" that a node expert would typically be needed for on a large project. We've found this framework to be incredibly intuitive for front-end devs, often with zero node experience, to pick up and start cranking out web components. And again, we're still looking for more real world implementations to solidify the framework. So if you're ready to get started with yukon, you get a free part-time consultant!
+
+### What is a yukon nodule? 
 A *__nodule__* is a self-discovering, self-registering web component tied to one or more express routes. With each incoming request, a nodule instance propagates throughout the express middleware chain as req.nodule. 
 
 A *__yukon nodule__* extends the base nodule behavior to include data gathering, stub-handling and template-rendering. It also allows custom app-defined middleware to be declared between each step of the request/response chain. Yukon attaches data returned as the res.yukon object, and sends res.yukon.renderData to the template or straight back to the client as JSON.
@@ -59,7 +67,7 @@ A *__yukon nodule__* extends the base nodule behavior to include data gathering,
 
 A nodule is analogous to a JSP or PHP page in those worlds. Unlike PHP/JSP behavior however, a nodule's route is declared and not tied by default to the filename or folder structure. So you are free to re-organize nodules without upsetting urls. More importantly, because nodules are self-discovering, there are no onerous config files to maintain (IE - Spring). This system allows a much more scalable architecture on large sites--as there are no config or other shared files which grow to enormous sizes as the site grows, and nodules can be re-organized with zero impact.
 
-## Motivation 
+### Motivation 
 From a __feature-development point of view__, we wanted to give developers the flexibility of [component-based architecture](http://en.wikipedia.org/wiki/Component-based_software_engineering) as much as possible, but still keep system-wide control over the middleware chain. On a small site with a small development team the latter might not be an issue. But on a large site with devs scattered all over the globe, some kind of middleware sandbox was a necessity. 
 
 Our feature devs spend 80-90% of their effort in jade templates or on the client side. For them, node components are often mostly a pass-through to our back-end API(s)--with some business logic applied to the request on the way in, and API data on the way out. Ideally they should have to learn as little as possible of the vagaries/plumbing/whatever-your-favorite-metaphor-for-framework-stuff of node. Creating a new node component should be as easy for them as creating a new JSP - but again, without the framework losing control of the middleware chain.
@@ -154,7 +162,8 @@ $ make test
 $ node demoServer
 ```
 ## To Do
-1. Reconsider stub behavior for parallel-api. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
+1. Consider using apiSim approach for any non REST data gathering. IE - node wraps any request to say Mongo, in an API call and uses itself as the API server. This would be huge for code clarity, as the yukon app would never have to worry about connecting to anything other than a REST API. Also this would make it trivially simple to split the data gathtering client and web client onto different servers - as the api server url would just be a config property.  Big question - is there a lot of performance overheard to node making an REST http call to itself? Is the perf hit worth it for code clarity and flexiblity?
+2. Reconsider stub behavior for parallel-api. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
 
 ## Features for future consideration
 + __Flesh out more plugins.__ Currently only the paralle-api plugin is fully operational. I need real-world sites to test this out on. (Free consulting!)
