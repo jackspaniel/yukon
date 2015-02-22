@@ -105,11 +105,10 @@ Yukon also adds the following optional nodule properties:
 2. __templateExt:__ default template extension
 3. __contentType:__ 'html' and 'json' are the only current values
 4. __preProcessor:__ use this function to manipulate query params or other business logic before back-end data-gathering
-5. __postProcessor__: use this function to process data returned from back-end data-gathering, before calling template or sending back to client as JSON
+5. __postProcessor__: use this function to process data returned from back-end data-gathering, before calling the template or sending the renderData back to the client as JSON
 6. __error:__ set to a string or an Error() instance to get the framework to call next(error)
+7. __apiCalls:__ array of API calls to made in parallel for this nodule, see the section below for details what constitutes an API call. *this property is added to nodule defaults by the parallel-api plugin*
 
-*this property is added to nodule defaults by the parallel-api plugin*
-7. __apiCalls:__ array of API calls to made in parallel for this nodule, see the section below for details what constitutes an API call. 
 <br>NOTE: global or semi-global calls like getProfile, getGlobalNav, etc. can be added to this array in the preData middleware.
 
 ### API-specific properties added by the parallel-api plugin (plugins/parallel-api/index.js - config.apiDefaults)
@@ -162,7 +161,7 @@ $ make test
 $ node demoServer
 ```
 ## To Do
-1. Consider using apiSim approach for any non REST data gathering. IE - node wraps any request to say Mongo, in an API call and uses itself as the API server. This would be huge for code clarity, as the yukon app would never have to worry about connecting to anything other than a REST API. Also this would make it trivially simple to split the data gathtering client and web client onto different servers - as the api server url would just be a config property.  Big question - is there a lot of performance overheard to node making an REST http call to itself? Is the perf hit worth it for code clarity and flexiblity?
+1. Consider using apiSim approach for any non REST data gathering. IE - node wraps any request to say Mongo, in just another nodule whose route is API call. So node is using itself as the API server and the nodule is going out to mongo or whatever async data source desired. This would be huge for code clarity, as the yukon app would never have to worry about connecting to anything other than a REST API. Also this would make it trivially simple to split the data gathtering client and web client onto different servers - as the api server url would just be a config property.  Big question - is there a lot of performance overheard to node making an REST http call to itself? Is the perf hit worth it for code clarity and flexiblity?
 2. Reconsider stub behavior for parallel-api. Should all stubs move to apiSim behavior? What about brand new nodules where nothing is known about the API yet?
 
 ## Features for future consideration
