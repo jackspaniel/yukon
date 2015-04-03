@@ -56,7 +56,7 @@ require('yukon')(app, config);
 
 ## Further Reading
 ### Brand new to node?
-If so then some of the terms that follow may be unfamilar. The good news is that the yukon framework is designed to handle a lot of the low level node "plumbing" that a node expert would typically be needed for on a large project. We've found this framework to be incredibly intuitive for front-end devs, often with zero node experience, to pick up and start cranking out web components. And again, we're still looking for more real world implementations to solidify the framework. So if you're ready to get started with yukon, you get a free part-time consultant!
+If so then some of the terms that follow may be unfamilar. The good news is that the yukon framework is designed to handle a lot of the low level node "plumbing" that a node expert would typically be needed for on a large project. We've found this framework to be incredibly intuitive for front-end devs, often with zero node experience, to pick up and start cranking out web components. And again, we're still looking for more real world implementations to solidify the framework. 
 
 ### What is a yukon nodule? 
 A *__nodule__* is a self-discovering, self-registering web component tied to one or more express routes. With each incoming request, a nodule instance propagates throughout the express middleware chain as req.nodule. 
