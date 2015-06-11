@@ -33,10 +33,10 @@ module.exports = function(app) {
     it('should post url-encoded form submit to API', function(done) {
       request(app)
         .post('/json/submitForm')
-        .query({ param1:'test1', param2:'test2' })
+        .send({param1:'test1', param2:'test2'})
         .type('form')
         .end(function(err, res) {
-          expect(res.text).toContain('"reqBody":{},"reqQuery":{"param1":"test1","param2":"test2"', 'res.text='+res.text);
+          expect(res.text).toContain('"reqBody":{"param1":"test1","param2":"test2"},"reqQuery":{}', 'res.text='+res.text);
           done();
         });
     });
@@ -44,10 +44,10 @@ module.exports = function(app) {
     it('should post JSON body form submit to API', function(done) {
       request(app)
         .post('/json/submitForm')
-        .send({ param1:'test1', param2:'test2' })
+        .send({ param1:'test1', param2:'test2', isJson: true })
         .type('json')
         .end(function(err, res) {
-          expect(res.text).toContain('"reqBody":{"param1":"test1","param2":"test2"},"reqQuery":{}', 'res.text='+res.text);
+          expect(res.text).toContain('"reqBody":{"param1":"test1","param2":"test2","isJson":"true"},"reqQuery":{}', 'res.text='+res.text);
           done();
         });
     });

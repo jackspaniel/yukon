@@ -33,7 +33,7 @@ module.exports = function(app) {
       // in real life don't forget to sanitize query params!
       if (!_.isEmpty(req.body)) {
         // change form body type sent to API
-        this.apiCalls[0].bodyType = 'json';
+        if (req.body.doJson) this.apiCalls[0].bodyType = 'json';
 
         this.apiCalls[0].params = req.body; // JSON body
       }

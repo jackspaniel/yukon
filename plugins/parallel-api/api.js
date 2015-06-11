@@ -29,7 +29,7 @@ module.exports = function(app, config) {
     debug('callApi called, namespace = ' + args.namespace);
 
     var callArgs = _.assign(_.cloneDeep(config.apiDefaults), args);
-    callArgs.paramMethod = (callArgs.verb !== 'get' && callArgs.bodyType === 'json') ? 'send' : 'query';
+    callArgs.paramMethod = callArgs.verb !== 'get' ? 'send' : 'query';
    
     config.apiCallBefore(callArgs, req, res);
 
