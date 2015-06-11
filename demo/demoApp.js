@@ -9,7 +9,8 @@ var debug;
 
 module.exports = function(app, appConfig) {  
   app = app || express();
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({limit: "500kb"}));
+  app.use(bodyParser.urlencoded({extended: true, limit: "500kb"}));
   appConfig = appConfig || {};
 
   var mergedConfig = _.merge({}, config, appConfig);

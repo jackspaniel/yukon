@@ -4,9 +4,13 @@ var _ = require('lodash');
 var path = require('path');
 var yukon = require('..');
 var express = require('express');
+var bodyParser = require('body-parser');
 
 module.exports = function(app, appConfig) {  
   app = app || express();
+  app.use(bodyParser.json({limit: "500kb"}));
+  app.use(bodyParser.urlencoded({extended: true, limit: "500kb"}));
+  appConfig = appConfig || {};
 
   var mergedConfig = _.merge({}, config, appConfig);
   
