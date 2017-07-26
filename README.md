@@ -8,7 +8,7 @@
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 
-__NOTE:__ This is still very much an active repo. We just haven't needed to change anything in a while. Any feature requests, issues or inquiries will be answered promptly.
+__NOTE:__ This is still very much an active repo. It powers the directv.com entertainment site. We just haven't needed to change anything in a while. Any feature requests, issues or inquiries will be answered promptly.
 
 yukon is a component-based, datasource-agnostic framework for serving web content. It extends the [nodulejs component framework](https://github.com/jackspaniel/nodulejs) - to include back-end data gathering, standardized slots for app-defined middleware and template management. 
 
